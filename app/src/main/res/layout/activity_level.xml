@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    tools:context=".LevelActivity">
+
+    <TextView
+        android:id="@+id/levelHeadline"
+        android:text="debug text"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_height="wrap_content"
+         />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0/3"
+        android:id="@+id/stage"
+        android:layout_alignParentEnd="true"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:padding="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignTop="@id/levelHeadline"
+        android:layout_marginTop="60dp"
+        android:id="@+id/EmptyFieldsRecyclerView"
+        tools:listitem="@layout/empty_fields_list"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/check"
+        android:id="@+id/checkButton"
+        />
+</RelativeLayout>
