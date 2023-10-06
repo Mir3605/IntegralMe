@@ -33,7 +33,7 @@ public class LevelActivity extends AppCompatActivity {
         emptyFieldsRecyclerView = findViewById(R.id.EmptyFieldsRecyclerView);
         int operationsNumber = 5;  //todo import number of operations
         ArrayList<String> emptyFieldsValues = new ArrayList<>();
-        for(int i = 0; i < operationsNumber; i++){
+        for (int i = 0; i < operationsNumber; i++) {
             emptyFieldsValues.add(" ");
         }
         EmptyFieldsRecViewAdapter adapter = new EmptyFieldsRecViewAdapter(this);
@@ -46,17 +46,16 @@ public class LevelActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 currentStageNumber++;
-                if(currentStageNumber>lastStageNumber){
+                if (currentStageNumber > lastStageNumber) {
                     finish();
-                }
-                else {
+                } else {
                     updateStage();
                 }
             }
         });
     }
 
-    private void updateStage(){
+    private void updateStage() {
         String newStageText = currentStageNumber + "/" + lastStageNumber;
         stage.setText(newStageText);
     }

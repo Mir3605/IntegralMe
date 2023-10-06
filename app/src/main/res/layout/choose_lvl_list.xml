@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/lvlParent"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/lvlParent">
+    android:layout_height="wrap_content">
 
     <Button
-        android:theme="@style/Base.Theme.IntegralMeFirst"
+        android:id="@+id/LvlButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Lvl"
         android:layout_margin="12dp"
-        android:id="@+id/LvlButton"
-        />
+        android:text="Lvl"
+        android:theme="@style/Base.Theme.IntegralMeFirst" />
 </RelativeLayout>

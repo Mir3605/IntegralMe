@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         chooseLvlRecView = findViewById(R.id.ChooseLvlRecView);
 
         ArrayList<Lvl> lvlsArray = new ArrayList<>();
-        for(int i = 0; i < difficultyLevelsNumber; i++){
+        for (int i = 0; i < difficultyLevelsNumber; i++) {
             lvlsArray.add(new Lvl(i));
         }
         LevelsRecViewAdapter adapter = new LevelsRecViewAdapter(this);
@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.BackMenu:
                 Toast.makeText(this, "Back clicked", Toast.LENGTH_SHORT).show();
                 //todo back button activity

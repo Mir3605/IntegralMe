@@ -3,7 +3,9 @@ package com.example.integralmefirst;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,6 +15,7 @@ import java.util.ArrayList;
 public class EmptyFieldsRecViewAdapter extends RecyclerView.Adapter<EmptyFieldsRecViewAdapter.ViewHolder> {
     private ArrayList<String> fields = new ArrayList<>();
     private LevelActivity mainActivity;
+    private int selectedPosition = 0;
 
     public EmptyFieldsRecViewAdapter(LevelActivity levelActivity) {
         this.mainActivity = levelActivity;
@@ -22,15 +25,24 @@ public class EmptyFieldsRecViewAdapter extends RecyclerView.Adapter<EmptyFieldsR
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.empty_fields_list, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.empty_field_button, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         String field = fields.get(position);
-        holder.emptyField.setText("          ");
-
+        holder.emptyField.setText(field);
+        holder.emptyField.setChecked(position == selectedPosition);
+        holder.emptyField.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    selectedPosition = holder.getAdapterPosition();
+                    notifyDataSetChanged();
+                }
+            }
+        });
     }
 
     @Override
@@ -38,7 +50,7 @@ public class EmptyFieldsRecViewAdapter extends RecyclerView.Adapter<EmptyFieldsR
         return fields.size();
     }
 
-    public void setEmptyFields(ArrayList<String> emptyFieldsList){
+    public void setEmptyFields(ArrayList<String> emptyFieldsList) {
         this.fields = emptyFieldsList;
         notifyDataSetChanged();
     }
