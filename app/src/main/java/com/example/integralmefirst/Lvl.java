@@ -12,10 +12,6 @@ public class Lvl {
         return difficulty;
     }
 
-    public void setDifficulty(int difficulty) {
-        this.difficulty = difficulty;
-    }
-
     public Lvl(int difficulty) {
         this.difficulty = difficulty;
     }

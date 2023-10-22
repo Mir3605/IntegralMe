@@ -31,6 +31,15 @@
         android:padding="20dp"
         tools:listitem="@layout/empty_field_button" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/AnswersRecyclerView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/checkButton"
+        android:layout_marginBottom="30dp"
+        android:padding="20dp"
+        tools:listitem="@layout/answer_button"/>
+
     <Button
         android:id="@+id/checkButton"
         android:layout_width="wrap_content"

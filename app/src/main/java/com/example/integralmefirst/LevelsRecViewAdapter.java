@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class LevelsRecViewAdapter extends RecyclerView.Adapter<LevelsRecViewAdapter.ViewHolder> {
 
     private ArrayList<Lvl> lvls = new ArrayList<>();
-    private MainActivity mainActivity;
+    private final MainActivity mainActivity;
 
     public LevelsRecViewAdapter(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
