@@ -35,12 +35,13 @@ public class EmptyFieldsRecViewAdapter extends RecyclerView.Adapter<EmptyFieldsR
         String field = fields.get(position);
         holder.emptyField.setText(field);
         holder.emptyField.setChecked(position == selectedPosition);
-        holder.emptyField.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        holder.emptyField.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) {
-                    //todo remove data from the button if not empty and send it to answers
+            public void onClick(View view) {
+                MathRadioButton button = (MathRadioButton) view;
+                if (!button.isChecked()){
                     selectedPosition = holder.getAdapterPosition();
+                    button.setChecked(true);
                     notifyDataSetChanged();
                 }
             }
@@ -68,7 +69,7 @@ public class EmptyFieldsRecViewAdapter extends RecyclerView.Adapter<EmptyFieldsR
         return selectedPosition;
     }
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private RadioButton emptyField;
+        private MathRadioButton emptyField;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -77,8 +78,8 @@ public class EmptyFieldsRecViewAdapter extends RecyclerView.Adapter<EmptyFieldsR
     }
     private void selectNextEmptyField(){
         int newSelectedPosition = (selectedPosition + 1)%getItemCount();
-        RadioButton button = (RadioButton) Objects.requireNonNull(recyclerView.getLayoutManager()).
+        MathRadioButton button = (MathRadioButton) Objects.requireNonNull(recyclerView.getLayoutManager()).
                 findViewByPosition(newSelectedPosition);
-        button.setChecked(true);
+        button.callOnClick();
     }
 }

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RadioButton xmlns:android="http://schemas.android.com/apk/res/android"
+<com.example.integralmefirst.MathRadioButton xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/emptyField"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/button_margin"
-    android:background="@drawable/border_change"
     android:button="@android:color/transparent"
     android:minWidth="160dp"
     android:textAlignment="center"
-    android:textColor="@color/white" />
+    app:setTextColor="@color/white"
+    app:setTextSize="12sp" />

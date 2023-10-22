@@ -36,7 +36,7 @@ public class AnswersRecViewAdapter extends RecyclerView.Adapter<AnswersRecViewAd
             @Override
             public void onClick(View view) {
                 String receivedData = levelActivity.setSelectedEmptyField(field);
-                if (Objects.equals(receivedData, "")){
+                if (Objects.equals(receivedData, "$\\,$")){
                     fields.remove(field);
                     notifyItemRangeRemoved(holder.getAdapterPosition(), 1);
                 }

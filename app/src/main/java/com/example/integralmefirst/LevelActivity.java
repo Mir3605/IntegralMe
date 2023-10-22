@@ -34,7 +34,7 @@ public class LevelActivity extends AppCompatActivity {
         int operationsNumber = 5;  //todo import number of operations
         ArrayList<String> emptyFieldsValues = new ArrayList<>();
         for (int i = 0; i < operationsNumber; i++) {
-            emptyFieldsValues.add("");
+            emptyFieldsValues.add("$\\,$");
         }
         emptyFieldsRecViewAdapter = new EmptyFieldsRecViewAdapter(this);
         emptyFieldsRecViewAdapter.setEmptyFields(emptyFieldsValues);
