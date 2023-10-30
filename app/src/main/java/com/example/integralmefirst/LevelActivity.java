@@ -1,6 +1,7 @@
 package com.example.integralmefirst;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -45,13 +46,13 @@ public class LevelActivity extends AppCompatActivity {
         int answersNumber = 7;  //todo import correct answers
         ArrayList<String> answersValues = new ArrayList<>();
         for (int i = 0; i < answersNumber; i++) {
-            answersValues.add(String.valueOf(i+1) + " $x=\\frac{1+y}{1+2z^2}$");
+            answersValues.add((i + 1) + " $x=\\frac{1+y}{1+2z^2}$");
         }
         answersRecViewAdapter = new AnswersRecViewAdapter(this);
         answersRecViewAdapter.setAnswers(answersValues);
         RecyclerView answersRecView = findViewById(R.id.AnswersRecyclerView);
         answersRecView.setAdapter(answersRecViewAdapter);
-        answersRecView.setLayoutManager(new LinearLayoutManager(this));
+        answersRecView.setLayoutManager(new GridLayoutManager(this, 2));
 
         Button checkButton = findViewById(R.id.checkButton);
         checkButton.setOnClickListener(new View.OnClickListener() {
@@ -72,7 +73,7 @@ public class LevelActivity extends AppCompatActivity {
         stage.setText(newStageText);
     }
 
-    public String setSelectedEmptyField(String data){
+    public String setSelectedEmptyField(String data) {
         return emptyFieldsRecViewAdapter.setSelectedEmptyField(data);
     }
 

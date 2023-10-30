@@ -1,7 +1,6 @@
 package com.example.integralmefirst;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.widget.Checkable;
 
@@ -23,7 +22,7 @@ public class MathRadioButton extends MathView implements Checkable {
     public void setChecked(boolean state) {
 
         checked = state;
-        if(checked)
+        if (checked)
             setBackground(AppCompatResources.getDrawable(context, R.drawable.border_button_selected));
         else
             setBackground(AppCompatResources.getDrawable(context, R.drawable.border_button_unselected));

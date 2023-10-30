@@ -3,8 +3,7 @@ package com.example.integralmefirst;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
-import android.widget.RadioButton;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,7 +14,7 @@ public class EmptyFieldsRecViewAdapter extends RecyclerView.Adapter<EmptyFieldsR
     private ArrayList<String> fields = new ArrayList<>();
     private final LevelActivity levelActivity;
     private int selectedPosition = 0;
-    private RecyclerView recyclerView;
+    private final RecyclerView recyclerView;
 
     public EmptyFieldsRecViewAdapter(LevelActivity levelActivity) {
         this.levelActivity = levelActivity;
@@ -39,10 +38,12 @@ public class EmptyFieldsRecViewAdapter extends RecyclerView.Adapter<EmptyFieldsR
             @Override
             public void onClick(View view) {
                 MathRadioButton button = (MathRadioButton) view;
-                if (!button.isChecked()){
+                if (!button.isChecked()) {
+                    int oldSelectedPosition = selectedPosition;
                     selectedPosition = holder.getAdapterPosition();
                     button.setChecked(true);
-                    notifyDataSetChanged();
+                    notifyItemChanged(oldSelectedPosition);
+                    notifyItemChanged(selectedPosition);
                 }
             }
         });
@@ -58,16 +59,17 @@ public class EmptyFieldsRecViewAdapter extends RecyclerView.Adapter<EmptyFieldsR
         notifyDataSetChanged();
     }
 
-    public String setSelectedEmptyField(String data){
+    public String setSelectedEmptyField(String data) {
         String s = fields.get(selectedPosition);
         fields.set(selectedPosition, data);
         selectNextEmptyField();
-        notifyDataSetChanged();
         return s;
     }
-    public int getSelectedPosition(){
+
+    public int getSelectedPosition() {
         return selectedPosition;
     }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         private MathRadioButton emptyField;
 
@@ -76,8 +78,9 @@ public class EmptyFieldsRecViewAdapter extends RecyclerView.Adapter<EmptyFieldsR
             emptyField = itemView.findViewById(R.id.emptyField);
         }
     }
-    private void selectNextEmptyField(){
-        int newSelectedPosition = (selectedPosition + 1)%getItemCount();
+
+    private void selectNextEmptyField() {
+        int newSelectedPosition = (selectedPosition + 1) % getItemCount();
         MathRadioButton button = (MathRadioButton) Objects.requireNonNull(recyclerView.getLayoutManager()).
                 findViewByPosition(newSelectedPosition);
         button.callOnClick();

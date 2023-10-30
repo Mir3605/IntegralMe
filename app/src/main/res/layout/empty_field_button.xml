@@ -3,10 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/emptyField"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_height="45dp"
+    android:layout_centerInParent="true"
     android:layout_margin="@dimen/button_margin"
     android:button="@android:color/transparent"
-    android:minWidth="160dp"
-    android:textAlignment="center"
     app:setTextColor="@color/white"
     app:setTextSize="12sp" />
