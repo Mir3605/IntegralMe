@@ -3,8 +3,10 @@ package com.example.integralmefirst;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -33,7 +35,14 @@ public class EmptyFieldsRecViewAdapter extends RecyclerView.Adapter<EmptyFieldsR
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         String field = fields.get(position);
         holder.emptyField.setText(field);
-        holder.emptyField.setChecked(position == selectedPosition);
+        if(position == selectedPosition){
+            holder.emptyField.setChecked(true);
+            holder.emptyFieldBox.setBackground(AppCompatResources.getDrawable(levelActivity, R.drawable.border_button_selected));
+        }
+        else {
+            holder.emptyField.setChecked(false);
+            holder.emptyFieldBox.setBackground(AppCompatResources.getDrawable(levelActivity, R.drawable.border_button_unselected));
+        }
         holder.emptyField.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -72,17 +81,19 @@ public class EmptyFieldsRecViewAdapter extends RecyclerView.Adapter<EmptyFieldsR
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private MathRadioButton emptyField;
+        private RelativeLayout emptyFieldBox;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             emptyField = itemView.findViewById(R.id.emptyField);
+            emptyFieldBox = itemView.findViewById(R.id.emptyFieldBox);
         }
     }
 
     private void selectNextEmptyField() {
         int newSelectedPosition = (selectedPosition + 1) % getItemCount();
-        MathRadioButton button = (MathRadioButton) Objects.requireNonNull(recyclerView.getLayoutManager()).
-                findViewByPosition(newSelectedPosition);
+        MathRadioButton button = Objects.requireNonNull(Objects.requireNonNull(recyclerView.getLayoutManager()).
+                findViewByPosition(newSelectedPosition)).findViewById(R.id.emptyField);
         button.callOnClick();
     }
 }

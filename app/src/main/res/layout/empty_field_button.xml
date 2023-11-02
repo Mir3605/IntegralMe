@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.example.integralmefirst.MathRadioButton xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/emptyField"
+    android:id="@+id/emptyFieldBox"
     android:layout_width="wrap_content"
-    android:layout_height="45dp"
-    android:layout_centerInParent="true"
-    android:layout_margin="@dimen/button_margin"
-    android:button="@android:color/transparent"
-    app:setTextColor="@color/white"
-    app:setTextSize="12sp" />
+    android:layout_height="wrap_content"
+    android:background="@drawable/border_button_unselected"
+    android:layout_margin="5dp"
+    android:padding="3dp">
+    <com.example.integralmefirst.MathRadioButton
+        android:id="@+id/emptyField"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_margin="@dimen/button_margin"
+        android:button="@android:color/transparent"
+        app:setTextColor="@color/white"
+        app:setTextSize="12sp" />
+</RelativeLayout>
+

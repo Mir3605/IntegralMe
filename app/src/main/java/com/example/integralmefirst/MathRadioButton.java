@@ -23,9 +23,9 @@ public class MathRadioButton extends MathView implements Checkable {
 
         checked = state;
         if (checked)
-            setBackground(AppCompatResources.getDrawable(context, R.drawable.border_button_selected));
+            setBackground(AppCompatResources.getDrawable(context, R.color.dark1_selected));
         else
-            setBackground(AppCompatResources.getDrawable(context, R.drawable.border_button_unselected));
+            setBackground(AppCompatResources.getDrawable(context, R.color.dark1));
         invalidate();
         requestLayout();
     }
