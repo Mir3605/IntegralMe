@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -14,8 +15,10 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 public class LevelActivity extends AppCompatActivity {
-    public static int lastStageNumber = 3;
-    private int currentStageNumber = 1;
+    private int lastStageNumber;
+    private int[] problemIds;
+    private int currentStageNumber;
+    private int difficulty;
     private ArrayList<String> correctAnswers;
     private EmptyFieldsRecViewAdapter emptyFieldsRecViewAdapter;
     private AnswersRecViewAdapter answersRecViewAdapter;
@@ -26,14 +29,19 @@ public class LevelActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_level);
 
-        int difficulty = getIntent().getIntExtra("difficulty", -1);
+        // getting stage and difficulty
+        difficulty = getIntent().getIntExtra("difficulty", -1);
+        problemIds = getIntent().getIntArrayExtra("chosenProblems");
+        assert problemIds != null;
+        lastStageNumber = problemIds.length;
+        currentStageNumber = getCurrentStageNumber();
         TextView headline = findViewById(R.id.levelHeadline);
         String newHeadlineText = getString(R.string.difficulty) + difficulty;
         headline.setText(newHeadlineText);
         stage = findViewById(R.id.stage);
         updateStage();
 
-
+        // inserting empty fields
         int operationsNumber = 5;  //todo import number of operations
         ArrayList<String> emptyFieldsValues = new ArrayList<>();
         for (int i = 0; i < operationsNumber; i++) {
@@ -45,6 +53,7 @@ public class LevelActivity extends AppCompatActivity {
         emptyFieldsRecView.setAdapter(emptyFieldsRecViewAdapter);
         emptyFieldsRecView.setLayoutManager(new LinearLayoutManager(this));
 
+        // inserting answers
         int answersNumber = 7;  //todo import correct answers
         ArrayList<String> answersValues = new ArrayList<>();
         correctAnswers = new ArrayList<>();
@@ -60,16 +69,17 @@ public class LevelActivity extends AppCompatActivity {
         answersRecView.setAdapter(answersRecViewAdapter);
         answersRecView.setLayoutManager(new GridLayoutManager(this, 2));
 
+        // check button functionality
         Button checkButton = findViewById(R.id.checkButton);
         checkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (areAnswersCorrect()) {
-                    currentStageNumber++;
+                if (answersCorrect()) {
+                    problemIds[currentStageNumber - 1] = -1; // marking that current stage is finished
                     if (currentStageNumber > lastStageNumber) {
                         finish();
                     } else {
-                        updateStage();
+                        moveToNextStage();
                     }
                 } else {
                     wrongAnswersToast();
@@ -83,11 +93,19 @@ public class LevelActivity extends AppCompatActivity {
         stage.setText(newStageText);
     }
 
+    private void moveToNextStage() {
+        Intent intent = new Intent(this, LevelActivity.class);
+        intent.putExtra("difficulty", difficulty);
+        intent.putExtra("chosenProblems", problemIds);
+        startActivity(intent);
+        finish();
+    }
+
     public String setSelectedEmptyField(String data) {
         return emptyFieldsRecViewAdapter.setSelectedEmptyField(data);
     }
 
-    private boolean areAnswersCorrect() {
+    private boolean answersCorrect() {
         return emptyFieldsRecViewAdapter.checkIfFieldsMatchWith(correctAnswers);
     }
 
@@ -95,5 +113,13 @@ public class LevelActivity extends AppCompatActivity {
         Toast toast = Toast.makeText(this, R.string.some_answers_are_incorrect,
                 Toast.LENGTH_LONG);
         toast.show();
+    }
+
+    private int getCurrentStageNumber() {
+        for (int i = 0; i < lastStageNumber; i++) {
+            if (problemIds[i] > -1)
+                return i + 1;
+        }
+        throw new RuntimeException("All stages finished, cannot start new stage");
     }
 }
