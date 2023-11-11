@@ -49,4 +49,5 @@
     </string>
     <string name="difficulty">"Difficulty "</string>
     <string name="check">check</string>
+    <string name="some_answers_are_incorrect">Some answers are incorrect</string>
 </resources>

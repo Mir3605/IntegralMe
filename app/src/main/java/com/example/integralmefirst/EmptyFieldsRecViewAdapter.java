@@ -96,4 +96,14 @@ public class EmptyFieldsRecViewAdapter extends RecyclerView.Adapter<EmptyFieldsR
                 findViewByPosition(newSelectedPosition)).findViewById(R.id.emptyField);
         button.callOnClick();
     }
+    public boolean checkIfFieldsMatchWith(@NonNull ArrayList<String> array){
+        if (array.size() != fields.size()){
+            return false;
+        }
+        for (int i=0; i<array.size(); i++){
+            if (!Objects.equals(array.get(i), fields.get(i)))
+                return false;
+        }
+        return true;
+    }
 }

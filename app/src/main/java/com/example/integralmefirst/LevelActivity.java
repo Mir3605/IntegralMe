@@ -9,12 +9,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class LevelActivity extends AppCompatActivity {
     public static int lastStageNumber = 3;
     private int currentStageNumber = 1;
+    private ArrayList<String> correctAnswers;
     private EmptyFieldsRecViewAdapter emptyFieldsRecViewAdapter;
     private AnswersRecViewAdapter answersRecViewAdapter;
     private TextView stage;
@@ -45,8 +47,12 @@ public class LevelActivity extends AppCompatActivity {
 
         int answersNumber = 7;  //todo import correct answers
         ArrayList<String> answersValues = new ArrayList<>();
-        for (int i = 0; i < answersNumber; i++) {
-            answersValues.add((i + 1) + " $x=\\frac{1+y}{1+2z^2}$");
+        correctAnswers = new ArrayList<>();
+        for (int i = 0; i < answersNumber; i++) {                    // adding random data
+            String sampleAnswer = (i + 1) + " $x=\\frac{1+y}{1+2z^2}$";
+            answersValues.add(sampleAnswer);
+            if (i < operationsNumber)
+                correctAnswers.add(sampleAnswer);
         }
         answersRecViewAdapter = new AnswersRecViewAdapter(this);
         answersRecViewAdapter.setAnswers(answersValues);
@@ -58,11 +64,15 @@ public class LevelActivity extends AppCompatActivity {
         checkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                currentStageNumber++;
-                if (currentStageNumber > lastStageNumber) {
-                    finish();
+                if (areAnswersCorrect()) {
+                    currentStageNumber++;
+                    if (currentStageNumber > lastStageNumber) {
+                        finish();
+                    } else {
+                        updateStage();
+                    }
                 } else {
-                    updateStage();
+                    wrongAnswersToast();
                 }
             }
         });
@@ -77,4 +87,13 @@ public class LevelActivity extends AppCompatActivity {
         return emptyFieldsRecViewAdapter.setSelectedEmptyField(data);
     }
 
+    private boolean areAnswersCorrect() {
+        return emptyFieldsRecViewAdapter.checkIfFieldsMatchWith(correctAnswers);
+    }
+
+    private void wrongAnswersToast() {
+        Toast toast = Toast.makeText(this, R.string.some_answers_are_incorrect,
+                Toast.LENGTH_LONG);
+        toast.show();
+    }
 }
