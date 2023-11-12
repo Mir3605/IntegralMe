@@ -4,16 +4,16 @@ CREATE TABLE problems (
   difficulty integer,
   user_solves_counter integer
 );
-
+=
 CREATE TABLE answers (
   id integer PRIMARY KEY,
   problem_id integer,
-  index integer,
+  ord_index integer,
   value text,
   FOREIGN KEY (problem_id)
          REFERENCES problems (id)
 );
-
+=
 CREATE TABLE games_history (
   id integer PRIMARY KEY,
   problem_id integer,

@@ -24,14 +24,16 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final DBTable problemsTable = new DBTable("problems", new String[]{"id",
             "value", "difficulty", "user_solves_counter"});
     public static final DBTable answersTable = new DBTable("answers", new String[]{"id",
-            "problem_id", "index", "value"});
+            "problem_id", "ord_index", "value"});
     public static final DBTable gamesHistoryTable = new DBTable("games_history", new String[]{"id",
             "problem_id", "time", "date"});
+    private static DBHelper currentDBHelper;
 
     public DBHelper(@Nullable Context context) {
         super(context, "integrals.db", null, 1);
         assert context != null;
         resources = context.getResources();
+        currentDBHelper = this;
     }
 
     @Override
@@ -42,7 +44,10 @@ public class DBHelper extends SQLiteOpenHelper {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        db.execSQL(createTables);
+        String[] createTablesSeparated;
+        createTablesSeparated = createTables.split("=");
+        for (int i = 0; i < 3; i++)
+            db.execSQL(createTablesSeparated[i]);
         try {
             insertData(db);
         } catch (IOException e) {
@@ -61,6 +66,12 @@ public class DBHelper extends SQLiteOpenHelper {
         os.close();
         is.close();
         return os.toString();
+    }
+
+    public static DBHelper getCurrentDBHelper() {
+        if (currentDBHelper == null)
+            throw new RuntimeException("DBHelper not initialized");
+        return currentDBHelper;
     }
 
     private void insertData(SQLiteDatabase db) throws IOException {
@@ -97,20 +108,52 @@ public class DBHelper extends SQLiteOpenHelper {
     public ArrayList<String> getAnswers(int problemId) {
         ArrayList<String> answers = new ArrayList<>();
         try (SQLiteDatabase db = getReadableDatabase()) {
-            String queryString = "SELECT * FROM " + answersTable.name + " WHERE " + answersTable.col[1] +
-                    " = " + problemId + " ORDER BY " + answersTable.col[2];
+            String queryString = "SELECT " + answersTable.col[3] + " FROM " + answersTable.name + " WHERE " + answersTable.col[1] +
+                    " = " + problemId + " ORDER BY " + answersTable.col[2] + " ASC";
             Cursor cursor = db.rawQuery(queryString, null);
-            if (cursor.moveToFirst()){
-                String value = cursor.getString(3);
+            if (cursor.moveToFirst()) {
+                String value = cursor.getString(0);
                 answers.add(value);
             }
             while (cursor.moveToNext()) {
-                String value = cursor.getString(3);
+                String value = cursor.getString(0);
                 answers.add(value);
             }
             cursor.close();
         }
+        answers.replaceAll(DBHelper::addDolar);
         return answers;
+    }
+
+    public ArrayList<String> getRandomAnswers(int difficulty, int numberOfAnswers) {
+        if (numberOfAnswers <= 0)
+            throw new RuntimeException("Cannot select 0 or less answers");
+        ArrayList<String> answers = new ArrayList<>();
+        try (SQLiteDatabase db = getReadableDatabase()) {
+            String queryString = "SELECT " + answersTable.name + "." + answersTable.col[3] + " FROM " + answersTable.name +
+                    " INNER JOIN " + problemsTable.name + " ON " + answersTable.name + "." +
+                    answersTable.col[1] + " = " + problemsTable.name + "." + problemsTable.col[0] +
+                    " WHERE " + problemsTable.col[2] + " = " + difficulty;
+            Cursor cursor = db.rawQuery(queryString, null);
+            if (cursor.moveToFirst()) {
+                String value = cursor.getString(0);
+                answers.add(value);
+            }
+            while (cursor.moveToNext()) {
+                String value = cursor.getString(0);
+                answers.add(value);
+            }
+            cursor.close();
+        }
+        Collections.shuffle(answers);
+        if (answers.size() > numberOfAnswers)
+            answers.subList(numberOfAnswers, answers.size()).clear();
+        answers.replaceAll(DBHelper::addDolar);
+        return answers;
+    }
+
+    private static String addDolar(String s) {
+        return "$" + s + "$";
     }
 
     public ArrayList<Integer> getRandomProblemsIds(int problemsNumber, int difficulty) {
@@ -121,35 +164,36 @@ public class DBHelper extends SQLiteOpenHelper {
             String queryString = "SELECT " + problemsTable.col[0] + " FROM " + problemsTable.name +
                     " WHERE " + problemsTable.col[2] + " = " + difficulty;
             Cursor cursor = db.rawQuery(queryString, null);
-            if(cursor.moveToFirst()){
+            if (cursor.moveToFirst()) {
                 Integer value = cursor.getInt(0);
-                System.out.println(value);
                 problemsIds.add(value);
             }
             while (cursor.moveToNext()) {
                 Integer value = cursor.getInt(0);
-                System.out.println(value);
                 problemsIds.add(value);
             }
+            cursor.close();
         }
         Collections.shuffle(problemsIds);
         if (problemsIds.size() > problemsNumber) {
             problemsIds.subList(problemsNumber, problemsIds.size()).clear();
         }
+
         return problemsIds;
     }
 
-    public String getProblemValueById(int problemId){
+    public String getProblemValueById(int problemId) {
         String value = "";
-        try (SQLiteDatabase db = getReadableDatabase()){
+        try (SQLiteDatabase db = getReadableDatabase()) {
             String queryString = "SELECT " + problemsTable.col[1] + " FROM " + problemsTable.name +
                     " WHERE " + problemsTable.col[0] + " = " + problemId;
             Cursor cursor = db.rawQuery(queryString, null);
-            if (cursor.moveToFirst()){
+            if (cursor.moveToFirst()) {
                 value = cursor.getString(0);
             }
+            cursor.close();
         }
-        return value;
+        return addDolar(value);
     }
 
     @Override

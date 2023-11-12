@@ -37,11 +37,10 @@ public class EmptyFieldsRecViewAdapter extends RecyclerView.Adapter<EmptyFieldsR
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         String field = fields.get(position);
         holder.emptyField.setText(field);
-        if(position == selectedPosition){
+        if (position == selectedPosition) {
             holder.emptyField.setChecked(true);
             holder.emptyFieldBox.setBackground(AppCompatResources.getDrawable(levelActivity, R.drawable.border_button_selected));
-        }
-        else {
+        } else {
             holder.emptyField.setChecked(false);
             holder.emptyFieldBox.setBackground(AppCompatResources.getDrawable(levelActivity, R.drawable.border_button_unselected));
         }
@@ -93,16 +92,21 @@ public class EmptyFieldsRecViewAdapter extends RecyclerView.Adapter<EmptyFieldsR
     }
 
     private void selectNextEmptyField() {
+        if (getItemCount() == 1) {
+            notifyItemChanged(0);
+            return;
+        }
         int newSelectedPosition = (selectedPosition + 1) % getItemCount();
         MathRadioButton button = Objects.requireNonNull(Objects.requireNonNull(recyclerView.getLayoutManager()).
                 findViewByPosition(newSelectedPosition)).findViewById(R.id.emptyField);
         button.callOnClick();
     }
-    public boolean checkIfFieldsMatchWith(@NonNull ArrayList<String> array){
-        if (array.size() != fields.size()){
+
+    public boolean checkIfFieldsMatchWith(@NonNull ArrayList<String> array) {
+        if (array.size() != fields.size()) {
             return false;
         }
-        for (int i=0; i<array.size(); i++){
+        for (int i = 0; i < array.size(); i++) {
             if (!Objects.equals(array.get(i), fields.get(i)))
                 return false;
         }

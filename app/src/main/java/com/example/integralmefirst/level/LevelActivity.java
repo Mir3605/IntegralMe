@@ -13,8 +13,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.integralmefirst.R;
+import com.example.integralmefirst.database.DBHelper;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import katex.hourglass.in.mathlib.MathView;
 
@@ -27,11 +29,13 @@ public class LevelActivity extends AppCompatActivity {
     private EmptyFieldsRecViewAdapter emptyFieldsRecViewAdapter;
     private AnswersRecViewAdapter answersRecViewAdapter;
     private TextView stage;
+    private DBHelper helper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_level);
+        helper = DBHelper.getCurrentDBHelper();
 
         // getting stage and difficulty
         difficulty = getIntent().getIntExtra("difficulty", -1);
@@ -44,13 +48,16 @@ public class LevelActivity extends AppCompatActivity {
         headline.setText(newHeadlineText);
         stage = findViewById(R.id.stage);
         updateStage();
+        int problemId = problemIds.get(currentStageNumber - 1);
 
         // inserting question
         MathView question = findViewById(R.id.Question);
-        question.setDisplayText("Question: $\\frac{1}{2}x=$");     // todo get from DB
+        String questionValue = helper.getProblemValueById(problemId);
+        question.setDisplayText(questionValue);
 
         // inserting empty fields
-        int operationsNumber = 4;  //todo import number of operations
+        correctAnswers = helper.getAnswers(problemId);
+        int operationsNumber = correctAnswers.size();
         ArrayList<String> emptyFieldsValues = new ArrayList<>();
         for (int i = 0; i < operationsNumber; i++) {
             emptyFieldsValues.add("$\\,$");
@@ -62,15 +69,12 @@ public class LevelActivity extends AppCompatActivity {
         emptyFieldsRecView.setLayoutManager(new LinearLayoutManager(this));
 
         // inserting answers
-        int answersNumber = 7;  //todo import correct answers
-        ArrayList<String> answersValues = new ArrayList<>();
-        correctAnswers = new ArrayList<>();
-        for (int i = 0; i < answersNumber; i++) {                    // adding random data
-            String sampleAnswer = (i + 1) + " $x=\\frac{1+y}{1+2z^2}$";
-            answersValues.add(sampleAnswer);
-            if (i < operationsNumber)
-                correctAnswers.add(sampleAnswer);
-        }
+        ArrayList<String> answersValues = new ArrayList<>(correctAnswers);
+        if (difficulty == 0)
+            answersValues.addAll(helper.getRandomAnswers(difficulty, 4));
+        else
+            answersValues.addAll(helper.getRandomAnswers(difficulty, 2));
+        Collections.shuffle(answersValues);
         answersRecViewAdapter = new AnswersRecViewAdapter(this);
         answersRecViewAdapter.setAnswers(answersValues);
         RecyclerView answersRecView = findViewById(R.id.AnswersRecyclerView);
@@ -83,7 +87,7 @@ public class LevelActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (answersCorrect()) {
-                    problemIds.set(currentStageNumber-1, -1); // marking that current stage is finished
+                    problemIds.set(currentStageNumber - 1, -1); // marking that current stage is finished
                     if (currentStageNumber >= lastStageNumber) {
                         finish();
                     } else {
