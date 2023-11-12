@@ -12,13 +12,13 @@
         android:theme="@style/Theme.IntegralMeFirst"
         tools:targetApi="31">
         <activity
-            android:name=".LevelActivity"
+            android:name=".level.LevelActivity"
             android:exported="false"
             android:label="@string/title_activity_level"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.IntegralMeFirst" />
         <activity
-            android:name=".MainActivity"
+            android:name=".mainmenu.MainActivity"
             android:screenOrientation="portrait"
             android:exported="true">
             <intent-filter>

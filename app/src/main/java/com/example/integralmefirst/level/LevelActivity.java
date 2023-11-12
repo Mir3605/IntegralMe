@@ -1,4 +1,4 @@
-package com.example.integralmefirst;
+package com.example.integralmefirst.level;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -11,6 +11,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.integralmefirst.R;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package com.example.integralmefirst;
+package com.example.integralmefirst.mainmenu;
 
 public class Lvl {
     private int difficulty;

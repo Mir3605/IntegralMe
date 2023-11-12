@@ -1,10 +1,12 @@
-package com.example.integralmefirst;
+package com.example.integralmefirst.level;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.Checkable;
 
 import androidx.appcompat.content.res.AppCompatResources;
+
+import com.example.integralmefirst.R;
 
 import katex.hourglass.in.mathlib.MathView;
 

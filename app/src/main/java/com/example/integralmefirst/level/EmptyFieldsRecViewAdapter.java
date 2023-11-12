@@ -1,4 +1,4 @@
-package com.example.integralmefirst;
+package com.example.integralmefirst.level;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +8,8 @@ import android.widget.RelativeLayout;
 import androidx.annotation.NonNull;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.integralmefirst.R;
 
 import java.util.ArrayList;
 import java.util.Objects;

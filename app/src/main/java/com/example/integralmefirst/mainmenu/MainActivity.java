@@ -1,4 +1,4 @@
-package com.example.integralmefirst;
+package com.example.integralmefirst.mainmenu;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
+
+import com.example.integralmefirst.R;
 
 import java.util.ArrayList;
 

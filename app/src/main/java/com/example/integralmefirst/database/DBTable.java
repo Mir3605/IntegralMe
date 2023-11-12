@@ -1,4 +1,4 @@
-package com.example.integralmefirst;
+package com.example.integralmefirst.database;
 
 public class DBTable {
     public final String name;

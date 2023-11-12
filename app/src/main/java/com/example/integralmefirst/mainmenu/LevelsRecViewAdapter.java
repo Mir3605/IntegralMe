@@ -1,4 +1,4 @@
-package com.example.integralmefirst;
+package com.example.integralmefirst.mainmenu;
 
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -8,6 +8,10 @@ import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.integralmefirst.level.LevelActivity;
+import com.example.integralmefirst.R;
+import com.example.integralmefirst.database.DBHelper;
 
 import java.util.ArrayList;
 

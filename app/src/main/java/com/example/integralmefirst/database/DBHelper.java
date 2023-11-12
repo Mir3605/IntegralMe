@@ -1,4 +1,4 @@
-package com.example.integralmefirst;
+package com.example.integralmefirst.database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import androidx.annotation.Nullable;
+
+import com.example.integralmefirst.R;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
