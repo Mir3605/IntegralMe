@@ -22,12 +22,22 @@
         android:layout_alignParentEnd="true"
         android:text="0/3" />
 
+    <katex.hourglass.in.mathlib.MathView
+        android:id="@+id/Question"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/levelHeadline"
+        android:layout_marginStart="25dp"
+        app:setText="question"
+        app:setTextColor="@color/white"
+        app:setTextSize="12sp" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/EmptyFieldsRecyclerView"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_alignTop="@id/levelHeadline"
-        android:layout_marginTop="60dp"
+        android:layout_below="@id/Question"
+        android:layout_marginTop="5dp"
         android:padding="20dp"
         tools:listitem="@layout/empty_field_button" />
 
@@ -35,10 +45,10 @@
         android:id="@+id/AnswersRecyclerView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/checkButton"
-        android:layout_marginBottom="30dp"
+        android:layout_above="@+id/checkButton"
+        android:layout_marginBottom="5dp"
         android:padding="20dp"
-        tools:listitem="@layout/answer_button"/>
+        tools:listitem="@layout/answer_button" />
 
     <Button
         android:id="@+id/checkButton"
