@@ -1,0 +1,69 @@
+0,1,c
+1,1,ax + c
+2,1,\frac{x^{r+1}}{r+1} + c
+3,1,lnx + c
+4,1,\frac{a^x}{lna} + c
+5,1,e^x + c
+6,1,-cosx + c
+7,1,sinx + c
+8,1,tgx + c
+9,1,-ctgx + c
+10,1,arctgx + c
+11,1,arcsinx + c
+12,1,\begin{vmatrix} t = -x^2\\  dt = -2xdx\\ xdx = -\frac{dt}{2} \end{vmatrix}
+12,2,-\frac{1}{2} \int e^t dt
+12,3,-\frac{1}{2}e^t + c
+12,4,-\frac{1}{2}e^{-x^2} + c
+13,1,\begin{vmatrix} t = a^2-x^2\\  dt = -2xdx\\ xdx = -\frac{dt}{2} \end{vmatrix}
+13,2,-\frac{1}{2} \int \sqrt{t} dt
+13,3,-\frac{1}{3} t^{\frac{3}{2}} + c
+13,4,-\frac{1}{3} \sqrt{a^2 - x^2}^3
+14,1,\begin{vmatrix} u = x   &  \frac{dv}{dx} = e^{-x} \\ \frac{du}{dx} = 1   &  v = -e^{-x}\end{vmatrix}
+14,2,-xe^{-x} + \int e^{-x}dx
+14,3,-xe^{-x} - e^{-x} + c
+15,1,\int \frac{sinx}{cosx}dx
+15,2,\begin{vmatrix} t = cosx \\ dt = -sinxdx \end{vmatrix}
+15,3,-\int \frac{1}{t}dt
+15,4,-lnt + c
+15,5,-ln(cosx) + c
+16,1,\begin{vmatrix} t = lnx \\ dt = \frac{1}{x}dx  \end{vmatrix}
+16,2,\int \frac{1}{t}dt
+16,3,lnt + c
+16,4,ln(lnx) + c
+17,1,\begin{vmatrix} u = x   &  \frac{dv}{dx} = sinx \\ \frac{du}{dx} = 1  &   v = -cosx\end{vmatrix}
+17,2,-xcosx + \int cosxdx
+17,3,-xcosx + sinx + c
+18,1,\begin{vmatrix} t = \sqrt{x}\\  dt = \frac{1}{2\sqrt{x}}dx\\ dx = 2tdt \end{vmatrix}
+18,2,2\int te^t dt 
+18,3,\begin{vmatrix} u = t & \frac{dv}{dt} = e^t\\  \frac{du}{dt} = 1 & v = e^t\end{vmatrix}
+18,4,te^t - \int e^t
+18,5,te^t - e^t + c
+18,6,\sqrt{x}e^{\sqrt{x}} - e^{\sqrt{x}} + c
+19,1,\begin{vmatrix} u = sin(lnx) & \frac{dv}{dt} = 1\\  \frac{du}{dt} = \frac{1}{x}cos(lnx) & v = x \end{vmatrix}
+19,2,xsin(lnx) - \int cos(lnx)dx
+19,3,\begin{vmatrix} u = cos(lnx) & \frac{dv}{dt} = 1\\  \frac{du}{dt} = -\frac{1}{x} sin(lnx) & v = x \end{vmatrix}
+19,4,xsin(lnx) - xcos(lnx) - \int sin(lnx)dx
+19,5,\frac{1}{2}x(sin(lnx) - cos(lnx)) + c
+20,1,\int \frac{cosx}{ln(sinx)sinx}dx 
+20,2,\begin{vmatrix} t = sinx \\ dt = cosxdx  \end{vmatrix}
+20,3,\frac{1}{tlnt}dt
+20,4,\begin{vmatrix} u = lnt \\ du = \frac{1}{t}dt \end{vmatrix}
+20,5,\int \frac{1}{u}du
+20,6,lnu + c
+20,7,ln(ln(sinx)) + c
+21,1,\int \frac{e^x}{e^{2x}+1}dx
+21,2,\begin{vmatrix} t = e^x \\  dt = e^xdx \end{vmatrix}
+21,3,\frac{1}{t^2 + 1}dt
+21,4,arctgt + c
+21,5,arctg(e^x) + c
+22,1,\begin{vmatrix} u = arcsinx & \frac{dv}{dt} = 1 \\  \frac{du}{dt} = \frac{1}{\sqrt{1 - x^2}} & v = x \end{vmatrix}
+22,2,xarcsinx - \int \frac{x}{\sqrt{1-x^2}}
+22,3,\begin{vmatrix} t = 1 - x^2 \\ dt = -2xdx \\ -\frac{1}{2}dt = xdx \end{vmatrix}
+22,4,xarcsinx + \int \frac{1}{2\sqrt{t}}dt
+22,5,xarcsinx + \sqrt{t} + c
+22,6,xarcsinx + \sqrt{1-x^2} + c
+23,1,\int \frac{1}{2}(1-cos2x)\cdot\frac{1}{2}(1+cos2x)dx
+23,2,\frac{1}{4}(1 - cos^2 2x)dx
+23,3,\frac{1}{4} \int sin^2 2xdx 
+23,4,\frac{1}{8} \int (1 - cos4x)dx 
+23,5,\frac{1}{8}x + \frac{1}{32}sin4x + c

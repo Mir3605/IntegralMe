@@ -1,0 +1,24 @@
+0,\int 0 dx,0
+1,\int a dx,0
+2,\int x^r dx,0
+3,\int \frac{1}{x} dx,0
+4,\int a^x dx,0
+5,\int e^x dx,0
+6,\int sin x dx,0
+7,\int cos x dx,0
+8,\int \frac{1}{cos^2 x} dx,0
+9,\int \frac{1}{sin^2 x} dx,0
+10,\int \frac{1}{1+x^2} dx,0
+11,\int \frac{1}{\sqrt{1-x^2}} dx,0
+12,\int xe^{-x^2}dx,1
+13,\int x\sqrt{a^2-x^2}dx,1
+14,\int xe^{-x}dx,1
+15,\int tgxdx,1
+16,\int \frac{1}{xlnx}dx,1
+17,\int xsinxdx,1
+18,\int e^{\sqrt{x}}dx,2
+19,\int sin(lnx)dx,2
+20,\int \frac{ctgx}{ln(sinx)}dx,2
+21,\int \frac{1}{e^x+e^{-x}},2
+22,\int arcsinx dx,2
+23,\int sin^2 xcos^2 xdx,2

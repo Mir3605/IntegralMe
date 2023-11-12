@@ -35,12 +35,12 @@ public class LevelsRecViewAdapter extends RecyclerView.Adapter<LevelsRecViewAdap
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        int[] problems = new int[3];
-                        for (int i=0; i<3; i++)
-                            problems[i] = i;                        //todo get real stages from DB
+                        DBHelper helper = new DBHelper(mainActivity);
+                        ArrayList<Integer> problemIds = helper.getRandomProblemsIds(
+                                MainActivity.difficultyLevelsNumber, lvl.getDifficulty());
                         Intent intent = new Intent(mainActivity, LevelActivity.class);
                         intent.putExtra("difficulty", lvl.getDifficulty());
-                        intent.putExtra("chosenProblems", problems);
+                        intent.putExtra("chosenProblems", problemIds);
                         mainActivity.startActivity(intent);
                     }
                 }

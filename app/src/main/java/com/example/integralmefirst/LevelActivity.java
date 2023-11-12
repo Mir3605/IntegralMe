@@ -14,9 +14,11 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import katex.hourglass.in.mathlib.MathView;
+
 public class LevelActivity extends AppCompatActivity {
     private int lastStageNumber;
-    private int[] problemIds;
+    private ArrayList<Integer> problemIds;
     private int currentStageNumber;
     private int difficulty;
     private ArrayList<String> correctAnswers;
@@ -31,9 +33,9 @@ public class LevelActivity extends AppCompatActivity {
 
         // getting stage and difficulty
         difficulty = getIntent().getIntExtra("difficulty", -1);
-        problemIds = getIntent().getIntArrayExtra("chosenProblems");
+        problemIds = getIntent().getIntegerArrayListExtra("chosenProblems");
         assert problemIds != null;
-        lastStageNumber = problemIds.length;
+        lastStageNumber = problemIds.size();
         currentStageNumber = getCurrentStageNumber();
         TextView headline = findViewById(R.id.levelHeadline);
         String newHeadlineText = getString(R.string.difficulty) + difficulty;
@@ -41,8 +43,12 @@ public class LevelActivity extends AppCompatActivity {
         stage = findViewById(R.id.stage);
         updateStage();
 
+        // inserting question
+        MathView question = findViewById(R.id.Question);
+        question.setDisplayText("Question: $\\frac{1}{2}x=$");     // todo get from DB
+
         // inserting empty fields
-        int operationsNumber = 5;  //todo import number of operations
+        int operationsNumber = 4;  //todo import number of operations
         ArrayList<String> emptyFieldsValues = new ArrayList<>();
         for (int i = 0; i < operationsNumber; i++) {
             emptyFieldsValues.add("$\\,$");
@@ -75,8 +81,8 @@ public class LevelActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (answersCorrect()) {
-                    problemIds[currentStageNumber - 1] = -1; // marking that current stage is finished
-                    if (currentStageNumber > lastStageNumber) {
+                    problemIds.set(currentStageNumber-1, -1); // marking that current stage is finished
+                    if (currentStageNumber >= lastStageNumber) {
                         finish();
                     } else {
                         moveToNextStage();
@@ -117,7 +123,7 @@ public class LevelActivity extends AppCompatActivity {
 
     private int getCurrentStageNumber() {
         for (int i = 0; i < lastStageNumber; i++) {
-            if (problemIds[i] > -1)
+            if (problemIds.get(i) > -1)
                 return i + 1;
         }
         throw new RuntimeException("All stages finished, cannot start new stage");

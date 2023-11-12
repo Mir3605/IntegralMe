@@ -1,0 +1,24 @@
+CREATE TABLE problems (
+  id integer PRIMARY KEY,
+  value text,
+  difficulty integer,
+  user_solves_counter integer
+);
+
+CREATE TABLE answers (
+  id integer PRIMARY KEY,
+  problem_id integer,
+  index integer,
+  value text,
+  FOREIGN KEY (problem_id)
+         REFERENCES problems (id)
+);
+
+CREATE TABLE games_history (
+  id integer PRIMARY KEY,
+  problem_id integer,
+  time integer,
+  date integer,
+  FOREIGN KEY (problem_id)
+           REFERENCES problems (id)
+);
