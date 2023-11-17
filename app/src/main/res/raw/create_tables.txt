@@ -14,11 +14,19 @@ CREATE TABLE answers (
          REFERENCES problems (id)
 );
 =
-CREATE TABLE games_history (
+CREATE TABLE games_points (
   id integer PRIMARY KEY,
+  points integer,
+  date integer
+);
+=
+CREATE TABLE games_history (
+  game_id integer,
   problem_id integer,
   time integer,
-  date integer,
   FOREIGN KEY (problem_id)
-           REFERENCES problems (id)
+           REFERENCES problems (id),
+  FOREIGN KEY (game_id)
+           REFERENCES games_points(id)
 );
+

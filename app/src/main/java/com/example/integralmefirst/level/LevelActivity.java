@@ -21,10 +21,15 @@ import java.util.Collections;
 import katex.hourglass.in.mathlib.MathView;
 
 public class LevelActivity extends AppCompatActivity {
+    public static final int seriesMultiplier = 20;
     private int lastStageNumber;
+    private long startTime;
+    private long[] timeList;
     private ArrayList<Integer> problemIds;
     private int currentStageNumber;
     private int difficulty;
+    private int points;
+    private int series;
     private ArrayList<String> correctAnswers;
     private EmptyFieldsRecViewAdapter emptyFieldsRecViewAdapter;
     private AnswersRecViewAdapter answersRecViewAdapter;
@@ -34,15 +39,21 @@ public class LevelActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_level);
         helper = DBHelper.getCurrentDBHelper();
 
-        // getting stage and difficulty
+        // getting stage, points and difficulty
         difficulty = getIntent().getIntExtra("difficulty", -1);
         problemIds = getIntent().getIntegerArrayListExtra("chosenProblems");
+        timeList = getIntent().getLongArrayExtra("timeList");
+        points = getIntent().getIntExtra("points", 0);
+        series = getIntent().getIntExtra("series", 0);
+        currentStageNumber = getIntent().getIntExtra("stageNum", 1);
         assert problemIds != null;
         lastStageNumber = problemIds.size();
-        currentStageNumber = getCurrentStageNumber();
+        TextView pointsView = findViewById(R.id.points);
+        pointsView.setText(String.valueOf(points));
         TextView headline = findViewById(R.id.levelHeadline);
         String newHeadlineText = getString(R.string.difficulty) + difficulty;
         headline.setText(newHeadlineText);
@@ -87,17 +98,24 @@ public class LevelActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (answersCorrect()) {
-                    problemIds.set(currentStageNumber - 1, -1); // marking that current stage is finished
+                    correctAnswerToast();
+                    points += (difficulty + 1) * 10 + seriesMultiplier * series;
+                    series++;
+                    timeList[currentStageNumber - 1] = System.currentTimeMillis() - startTime;
                     if (currentStageNumber >= lastStageNumber) {
+                        helper.addGameToHistory(problemIds, timeList, points);
                         finish();
                     } else {
                         moveToNextStage();
                     }
                 } else {
                     wrongAnswersToast();
+                    series = 0;
                 }
             }
         });
+
+        startTime = System.currentTimeMillis();
     }
 
     private void updateStage() {
@@ -109,6 +127,10 @@ public class LevelActivity extends AppCompatActivity {
         Intent intent = new Intent(this, LevelActivity.class);
         intent.putExtra("difficulty", difficulty);
         intent.putExtra("chosenProblems", problemIds);
+        intent.putExtra("points", points);
+        intent.putExtra("series", series);
+        intent.putExtra("stageNum", currentStageNumber + 1);
+        intent.putExtra("timeList", timeList);
         startActivity(intent);
         finish();
     }
@@ -127,11 +149,9 @@ public class LevelActivity extends AppCompatActivity {
         toast.show();
     }
 
-    private int getCurrentStageNumber() {
-        for (int i = 0; i < lastStageNumber; i++) {
-            if (problemIds.get(i) > -1)
-                return i + 1;
-        }
-        throw new RuntimeException("All stages finished, cannot start new stage");
+    private void correctAnswerToast() {
+        Toast toast = Toast.makeText(this, getString(R.string.correct_answer_toast_text) +
+                series * seriesMultiplier, Toast.LENGTH_SHORT);
+        toast.show();
     }
 }

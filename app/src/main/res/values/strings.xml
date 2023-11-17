@@ -50,4 +50,6 @@
     <string name="difficulty">"Difficulty "</string>
     <string name="check">check</string>
     <string name="some_answers_are_incorrect">Some answers are incorrect</string>
+    <string name="correct_answer_toast_text">"Correct! Series bonus points: "</string>
+    <string name="games_history">Games history</string>
 </resources>

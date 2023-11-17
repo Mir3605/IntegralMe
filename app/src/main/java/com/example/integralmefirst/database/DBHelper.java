@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
 
 import com.example.integralmefirst.R;
+import com.example.integralmefirst.gameshistory.GameData;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -21,16 +22,19 @@ import java.util.Collections;
 
 public class DBHelper extends SQLiteOpenHelper {
     private final Resources resources;
+    private static final String dbName = "integrals.db";
     public static final DBTable problemsTable = new DBTable("problems", new String[]{"id",
             "value", "difficulty", "user_solves_counter"});
     public static final DBTable answersTable = new DBTable("answers", new String[]{"id",
             "problem_id", "ord_index", "value"});
-    public static final DBTable gamesHistoryTable = new DBTable("games_history", new String[]{"id",
-            "problem_id", "time", "date"});
+    public static final DBTable gamesHistoryTable = new DBTable("games_history", new String[]{"game_id",
+            "problem_id", "time"});
+    public static final DBTable gamesPointsTable = new DBTable("games_points", new String[]{"id",
+            "points", "date"});
     private static DBHelper currentDBHelper;
 
     public DBHelper(@Nullable Context context) {
-        super(context, "integrals.db", null, 1);
+        super(context, dbName, null, 1);
         assert context != null;
         resources = context.getResources();
         currentDBHelper = this;
@@ -46,8 +50,8 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         String[] createTablesSeparated;
         createTablesSeparated = createTables.split("=");
-        for (int i = 0; i < 3; i++)
-            db.execSQL(createTablesSeparated[i]);
+        for (String s : createTablesSeparated)
+            db.execSQL(s);
         try {
             insertData(db);
         } catch (IOException e) {
@@ -199,5 +203,69 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
 
+    }
+
+    public static void removeDatabase(Context context) {
+        context.deleteDatabase(dbName);
+    }
+
+    public void addGameToHistory(ArrayList<Integer> problemIds, long[] times, int points) {
+        try (SQLiteDatabase db = getWritableDatabase()) {
+            ContentValues values = new ContentValues();
+            values.put(gamesPointsTable.col[1], points);
+            values.put(gamesPointsTable.col[2], System.currentTimeMillis());
+            long id = db.insert(gamesPointsTable.name, null, values);
+            for (int i = 0; i < problemIds.size(); i++) {
+                values = new ContentValues();
+                values.put(gamesHistoryTable.col[0], id);
+                values.put(gamesHistoryTable.col[1], problemIds.get(i));
+                values.put(gamesHistoryTable.col[2], times[i]);
+                db.insert(gamesHistoryTable.name, null, values);
+            }
+        }
+    }
+
+    public ArrayList<GameData> getGamesHistory() {
+        ArrayList<GameData> gamesHistoryArray = new ArrayList<>();
+        try (SQLiteDatabase db = getReadableDatabase()) {
+            ArrayList<Integer> gamesIds = new ArrayList<>();
+            String query = "SELECT " + gamesPointsTable.col[0] + " FROM " + gamesPointsTable.name;
+            Cursor cursor = db.rawQuery(query, null);
+            if (cursor.moveToFirst()) {
+                Integer value = cursor.getInt(0);
+                gamesIds.add(value);
+            }
+            while (cursor.moveToNext()) {
+                Integer value = cursor.getInt(0);
+                gamesIds.add(value);
+            }
+            cursor.close();
+            for (Integer gameId : gamesIds) {
+                query = "SELECT " + problemsTable.getColWithTableName(1) + ", " +
+                        gamesPointsTable.getColWithTableName(1) + ", " +
+                        gamesPointsTable.getColWithTableName(2) + ", " +
+                        gamesHistoryTable.getColWithTableName(2) + " FROM " +
+                        gamesPointsTable.name + " INNER JOIN " + gamesHistoryTable.name + " ON " +
+                        gamesPointsTable.getColWithTableName(0) + " = " +
+                        gamesHistoryTable.getColWithTableName(0) + " INNER JOIN " +
+                        problemsTable.name + " ON " + problemsTable.getColWithTableName(0) +
+                        " = " + gamesHistoryTable.getColWithTableName(1) + " WHERE " +
+                        gamesPointsTable.getColWithTableName(0) + " = " + gameId;
+                cursor = db.rawQuery(query, null);
+                cursor.moveToFirst();
+                ArrayList<String> problems = new ArrayList<>();
+                ArrayList<Long> times = new ArrayList<>();
+                int points = cursor.getInt(1);
+                long date = cursor.getLong(2);
+                while(!cursor.isAfterLast()){
+                    problems.add(cursor.getString(0));
+                    times.add(cursor.getLong(3));
+                    cursor.moveToNext();
+                }
+                cursor.close();
+                gamesHistoryArray.add(new GameData(problems, points, times, date));
+            }
+        }
+        return gamesHistoryArray;
     }
 }
