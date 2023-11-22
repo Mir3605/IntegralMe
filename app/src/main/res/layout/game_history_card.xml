@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/GameHistoryCard"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="25dp"
+    android:padding="4dp"
+    app:cardCornerRadius="6dp"
+    app:cardElevation="15dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="4dp">
+
+        <TextView
+            android:id="@+id/Points"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:text="@string/score"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/Date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:text="12.12.2012"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/ProblemsWord"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/Points"
+            android:layout_alignParentStart="true"
+            android:text="@string/problems" />
+
+        <TextView
+            android:id="@+id/TimesWord"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/Date"
+            android:layout_alignParentEnd="true"
+            android:text="@string/times" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/ProblemTimeRecView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ProblemsWord"
+            android:layout_marginTop="10dp"
+            tools:listitem="@layout/problem_time" />
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

@@ -257,12 +257,13 @@ public class DBHelper extends SQLiteOpenHelper {
                 ArrayList<Long> times = new ArrayList<>();
                 int points = cursor.getInt(1);
                 long date = cursor.getLong(2);
-                while(!cursor.isAfterLast()){
+                while (!cursor.isAfterLast()) {
                     problems.add(cursor.getString(0));
                     times.add(cursor.getLong(3));
                     cursor.moveToNext();
                 }
                 cursor.close();
+                problems.replaceAll(DBHelper::addDolar);
                 gamesHistoryArray.add(new GameData(problems, points, times, date));
             }
         }

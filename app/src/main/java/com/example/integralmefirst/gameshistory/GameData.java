@@ -1,5 +1,6 @@
 package com.example.integralmefirst.gameshistory;
 
+import java.sql.Date;
 import java.util.ArrayList;
 
 public class GameData {
@@ -20,8 +21,12 @@ public class GameData {
         return times;
     }
 
-    public long getDates() {
+    public long getDate() {
         return date;
+    }
+    public String getDateAsString(){
+        Date date = new Date(getDate());
+        return date.toString();
     }
 
     public GameData(ArrayList<String> problems, int points, ArrayList<Long> times, long date) {

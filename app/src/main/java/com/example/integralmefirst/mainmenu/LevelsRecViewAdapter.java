@@ -39,7 +39,7 @@ public class LevelsRecViewAdapter extends RecyclerView.Adapter<LevelsRecViewAdap
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        DBHelper helper = new DBHelper(mainActivity);
+                        DBHelper helper = DBHelper.getCurrentDBHelper();
                         ArrayList<Integer> problemIds = helper.getRandomProblemsIds(
                                 MainActivity.stagesInLevel, lvl.getDifficulty());
                         Intent intent = new Intent(mainActivity, LevelActivity.class);

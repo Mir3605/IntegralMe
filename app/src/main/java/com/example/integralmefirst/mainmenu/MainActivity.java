@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.integralmefirst.R;
+import com.example.integralmefirst.database.DBHelper;
 import com.example.integralmefirst.gameshistory.GamesHistoryActivity;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        DBHelper helper = new DBHelper(this);
         RecyclerView chooseLvlRecView = findViewById(R.id.ChooseLvlRecView);
 
         ArrayList<Lvl> lvlsArray = new ArrayList<>();
@@ -42,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void switchToGamesHistory(){
+    private void switchToGamesHistory() {
         Intent intent = new Intent(this, GamesHistoryActivity.class);
         startActivity(intent);
     }
