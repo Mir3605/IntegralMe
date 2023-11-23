@@ -15,6 +15,6 @@
         android:layout_margin="@dimen/button_margin"
         android:button="@android:color/transparent"
         app:setTextColor="@color/white"
-        app:setTextSize="12sp" />
+        app:setTextSize="@dimen/math_text_size_lvl" />
 </RelativeLayout>
 

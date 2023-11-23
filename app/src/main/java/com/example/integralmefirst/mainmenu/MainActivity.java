@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        DBHelper helper = new DBHelper(this);
+        DBHelper helper = new DBHelper(this); // DBHelper should be initialized at the beginning of the program
         RecyclerView chooseLvlRecView = findViewById(R.id.ChooseLvlRecView);
 
         ArrayList<Lvl> lvlsArray = new ArrayList<>();

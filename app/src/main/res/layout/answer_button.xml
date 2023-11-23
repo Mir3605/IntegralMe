@@ -6,6 +6,6 @@
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/button_margin"
     app:setTextColor="@color/white"
-    app:setTextSize="12sp">
+    app:setTextSize="@dimen/math_text_size_lvl">
 
 </katex.hourglass.in.mathlib.MathView>

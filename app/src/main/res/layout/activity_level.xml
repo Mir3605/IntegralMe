@@ -34,28 +34,45 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/levelHeadline"
-        android:layout_marginStart="25dp"
+        android:layout_marginStart="15dp"
         app:setText="question"
         app:setTextColor="@color/white"
-        app:setTextSize="12sp" />
+        app:setTextSize="@dimen/math_text_size_lvl" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/EmptyFieldsRecyclerView"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_above="@id/LevelCenter"
         android:layout_below="@id/Question"
         android:layout_marginTop="5dp"
-        android:padding="20dp"
+        android:padding="10dp"
+        android:scrollbarAlwaysDrawVerticalTrack="true"
         tools:listitem="@layout/empty_field_button" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/AnswersRecyclerView"
+    <RelativeLayout
+        android:id="@+id/LevelCenter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
+
+    <RelativeLayout
+        android:id="@+id/AnswersViewBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/checkButton"
-        android:layout_marginBottom="5dp"
-        android:padding="20dp"
-        tools:listitem="@layout/answer_button" />
+        android:layout_below="@id/LevelCenter">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/AnswersRecyclerView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="5dp"
+            android:padding="20dp"
+            tools:listitem="@layout/answer_button" />
+    </RelativeLayout>
+
 
     <Button
         android:id="@+id/checkButton"

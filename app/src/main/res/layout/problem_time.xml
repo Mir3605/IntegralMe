@@ -11,7 +11,8 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
         app:setText="$\frac{1}{2} example$"
-        app:setTextColor="@color/white" />
+        app:setTextColor="@color/white"
+        app:setTextSize="@dimen/math_text_size_lvl" />
 
     <TextView
         android:id="@+id/Time"

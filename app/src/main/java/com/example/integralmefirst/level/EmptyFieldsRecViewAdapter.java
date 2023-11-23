@@ -76,10 +76,6 @@ public class EmptyFieldsRecViewAdapter extends RecyclerView.Adapter<EmptyFieldsR
         return s;
     }
 
-    public int getSelectedPosition() {
-        return selectedPosition;
-    }
-
     public class ViewHolder extends RecyclerView.ViewHolder {
         private MathRadioButton emptyField;
         private RelativeLayout emptyFieldBox;
@@ -92,14 +88,44 @@ public class EmptyFieldsRecViewAdapter extends RecyclerView.Adapter<EmptyFieldsR
     }
 
     private void selectNextEmptyField() {
-        if (getItemCount() == 1) {
-            notifyItemChanged(0);
+        int newSelectedPosition = (selectedPosition + 1) % getItemCount();
+        if (newSelectedPosition == 0) {
+            notifyItemChanged(getItemCount() - 1);
             return;
         }
-        int newSelectedPosition = (selectedPosition + 1) % getItemCount();
-        MathRadioButton button = Objects.requireNonNull(Objects.requireNonNull(recyclerView.getLayoutManager()).
-                findViewByPosition(newSelectedPosition)).findViewById(R.id.emptyField);
+        MathRadioButton button = getMathRadioButtonSafe(newSelectedPosition);
+        if (button == null) {
+            notifyItemChanged(selectedPosition);
+            return;
+        }
         button.callOnClick();
+    }
+
+    private MathRadioButton getMathRadioButtonSafe(int position) {
+        MathRadioButton button = null;
+        int maxIter = 100000;
+        while (button == null && maxIter > 0) {
+            recyclerView.scrollToPosition(position);
+            RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
+            while (manager == null && maxIter > 0) {
+                recyclerView.scrollBy(0, 5);
+                manager = recyclerView.getLayoutManager();
+                maxIter--;
+            }
+            if (maxIter < 1)
+                break;
+            View view = manager.findViewByPosition(position);
+            while (view == null && maxIter > 0) {
+                recyclerView.scrollBy(0, 5);
+                view = manager.findViewByPosition(position);
+                maxIter--;
+            }
+            if (maxIter < 1)
+                break;
+            button = view.findViewById(R.id.emptyField);
+            maxIter--;
+        }
+        return button;
     }
 
     public boolean checkIfFieldsMatchWith(@NonNull ArrayList<String> array) {

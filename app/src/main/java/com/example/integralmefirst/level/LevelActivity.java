@@ -1,7 +1,6 @@
 package com.example.integralmefirst.level;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,7 +31,6 @@ public class LevelActivity extends AppCompatActivity {
     private int series;
     private ArrayList<String> correctAnswers;
     private EmptyFieldsRecViewAdapter emptyFieldsRecViewAdapter;
-    private AnswersRecViewAdapter answersRecViewAdapter;
     private TextView stage;
     private DBHelper helper;
 
@@ -66,7 +64,16 @@ public class LevelActivity extends AppCompatActivity {
         String questionValue = helper.getProblemValueById(problemId);
         question.setDisplayText(questionValue);
 
-        // inserting empty fields
+        initializeEmptyFieldsRecView(problemId);
+
+        initializeAnswersRecView();
+
+        setCheckButtonFunctionality();
+
+        startTime = System.currentTimeMillis();
+    }
+
+    private void initializeEmptyFieldsRecView(int problemId) {
         correctAnswers = helper.getAnswers(problemId);
         int operationsNumber = correctAnswers.size();
         ArrayList<String> emptyFieldsValues = new ArrayList<>();
@@ -78,21 +85,23 @@ public class LevelActivity extends AppCompatActivity {
         RecyclerView emptyFieldsRecView = findViewById(R.id.EmptyFieldsRecyclerView);
         emptyFieldsRecView.setAdapter(emptyFieldsRecViewAdapter);
         emptyFieldsRecView.setLayoutManager(new LinearLayoutManager(this));
+    }
 
-        // inserting answers
+    private void initializeAnswersRecView() {
         ArrayList<String> answersValues = new ArrayList<>(correctAnswers);
         if (difficulty == 0)
             answersValues.addAll(helper.getRandomAnswers(difficulty, 4));
         else
             answersValues.addAll(helper.getRandomAnswers(difficulty, 2));
         Collections.shuffle(answersValues);
-        answersRecViewAdapter = new AnswersRecViewAdapter(this);
+        AnswersRecViewAdapter answersRecViewAdapter = new AnswersRecViewAdapter(this);
         answersRecViewAdapter.setAnswers(answersValues);
         RecyclerView answersRecView = findViewById(R.id.AnswersRecyclerView);
         answersRecView.setAdapter(answersRecViewAdapter);
-        answersRecView.setLayoutManager(new GridLayoutManager(this, 2));
+        answersRecView.setLayoutManager(new LinearLayoutManager(this));
+    }
 
-        // check button functionality
+    private void setCheckButtonFunctionality() {
         Button checkButton = findViewById(R.id.checkButton);
         checkButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,8 +123,6 @@ public class LevelActivity extends AppCompatActivity {
                 }
             }
         });
-
-        startTime = System.currentTimeMillis();
     }
 
     private void updateStage() {

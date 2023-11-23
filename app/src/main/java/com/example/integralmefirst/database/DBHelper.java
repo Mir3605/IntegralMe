@@ -78,6 +78,17 @@ public class DBHelper extends SQLiteOpenHelper {
         return currentDBHelper;
     }
 
+    public void reloadAnswersAndProblems() {
+        try (SQLiteDatabase db = getReadableDatabase()) {
+            db.delete(problemsTable.name, null, null);
+            db.delete(answersTable.name, null, null);
+            insertData(db);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
     private void insertData(SQLiteDatabase db) throws IOException {
         InputStream is = resources.openRawResource(R.raw.problems);
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
