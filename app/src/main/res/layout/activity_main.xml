@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="130dp"
+        android:layout_marginTop="100dp"
         android:text="@string/welcome_text"
         android:textSize="30sp" />
 
@@ -25,12 +25,22 @@
         android:padding="20dp" />
 
     <Button
+        android:id="@+id/SettingsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/GamesHistoryButton"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="@dimen/Margin_between_buttons_main_activity"
+        android:text="@string/settings" />
+
+    <Button
         android:id="@+id/GamesHistoryButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_margin="20dp"
+        android:layout_marginTop="@dimen/Margin_between_buttons_main_activity"
+        android:layout_marginBottom="20dp"
         android:text="@string/games_history" />
 
 </RelativeLayout>

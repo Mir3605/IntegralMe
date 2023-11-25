@@ -8,7 +8,7 @@
         android:id="@+id/LvlButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="12dp"
+        android:layout_margin="@dimen/Margin_between_buttons_main_activity"
         android:text="Lvl"
         android:theme="@style/Base.Theme.IntegralMeFirst" />
 </RelativeLayout>

@@ -2,4 +2,7 @@
       <dimen name="fab_margin">16dp</dimen>
     <dimen name="button_margin">4dp</dimen>
     <dimen name="math_text_size_lvl">11sp</dimen>
+    <dimen name="Margin_between_buttons_main_activity">12dp</dimen>
+    <dimen name="title_size">25sp</dimen>
+    <dimen name="title_margin_bottom">30dp</dimen>
 </resources>

@@ -12,6 +12,7 @@ import android.widget.Button;
 import com.example.integralmefirst.R;
 import com.example.integralmefirst.database.DBHelper;
 import com.example.integralmefirst.gameshistory.GamesHistoryActivity;
+import com.example.integralmefirst.settings.SettingsActivity;
 
 import java.util.ArrayList;
 
@@ -42,10 +43,22 @@ public class MainActivity extends AppCompatActivity {
                 switchToGamesHistory();
             }
         });
+        Button settingsButton = findViewById(R.id.SettingsButton);
+        settingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switchToSettings();
+            }
+        });
     }
 
     private void switchToGamesHistory() {
         Intent intent = new Intent(this, GamesHistoryActivity.class);
+        startActivity(intent);
+    }
+
+    private void switchToSettings() {
+        Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
     }
 }
