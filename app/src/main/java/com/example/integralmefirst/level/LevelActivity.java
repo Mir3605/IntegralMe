@@ -66,7 +66,7 @@ public class LevelActivity extends AppCompatActivity {
 
         initializeEmptyFieldsRecView(problemId);
 
-        initializeAnswersRecView();
+        initializeAnswersRecView(problemId);
 
         setCheckButtonFunctionality();
 
@@ -87,12 +87,12 @@ public class LevelActivity extends AppCompatActivity {
         emptyFieldsRecView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    private void initializeAnswersRecView() {
+    private void initializeAnswersRecView(int problemId) {
         ArrayList<String> answersValues = new ArrayList<>(correctAnswers);
         if (difficulty == 0)
-            answersValues.addAll(helper.getRandomAnswers(difficulty, 4));
+            answersValues.addAll(helper.getRandomAnswersExcludingCorrect(difficulty, 4, problemId));
         else
-            answersValues.addAll(helper.getRandomAnswers(difficulty, 2));
+            answersValues.addAll(helper.getRandomAnswersExcludingCorrect(difficulty, 2, problemId));
         Collections.shuffle(answersValues);
         AnswersRecViewAdapter answersRecViewAdapter = new AnswersRecViewAdapter(this);
         answersRecViewAdapter.setAnswers(answersValues);

@@ -143,14 +143,19 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public ArrayList<String> getRandomAnswers(int difficulty, int numberOfAnswers) {
+        return getRandomAnswersExcludingCorrect(difficulty, numberOfAnswers, -1);
+    }
+
+    public ArrayList<String> getRandomAnswersExcludingCorrect(int difficulty, int numberOfAnswers, int problemId) {
         if (numberOfAnswers <= 0)
             throw new RuntimeException("Cannot select 0 or less answers");
         ArrayList<String> answers = new ArrayList<>();
         try (SQLiteDatabase db = getReadableDatabase()) {
-            String queryString = "SELECT " + answersTable.name + "." + answersTable.col[3] + " FROM " + answersTable.name +
-                    " INNER JOIN " + problemsTable.name + " ON " + answersTable.name + "." +
-                    answersTable.col[1] + " = " + problemsTable.name + "." + problemsTable.col[0] +
-                    " WHERE " + problemsTable.col[2] + " = " + difficulty;
+            String queryString = "SELECT " + answersTable.getColWithTableName(3) + " FROM " +
+                    answersTable.name + " INNER JOIN " + problemsTable.name + " ON " +
+                    answersTable.getColWithTableName(1) + " = " + problemsTable.getColWithTableName(0) +
+                    " WHERE " + problemsTable.col[2] + " = " + difficulty + " AND " +
+                    problemsTable.getColWithTableName(0) + " != " + problemId;
             Cursor cursor = db.rawQuery(queryString, null);
             if (cursor.moveToFirst()) {
                 String value = cursor.getString(0);
