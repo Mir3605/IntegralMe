@@ -22,6 +22,7 @@ import java.util.Collections;
 
 public class DBHelper extends SQLiteOpenHelper {
     private final Resources resources;
+    private final Context context;
     private static final String dbName = "integrals.db";
     public static final DBTable problemsTable = new DBTable("problems", new String[]{"id",
             "value", "difficulty", "user_solves_counter"});
@@ -36,6 +37,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public DBHelper(@Nullable Context context) {
         super(context, dbName, null, 1);
         assert context != null;
+        this.context = context;
         resources = context.getResources();
         currentDBHelper = this;
     }
@@ -218,6 +220,11 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public static void removeDatabase(Context context) {
         context.deleteDatabase(dbName);
+    }
+
+    public void recreateDatabaseAndClose() {
+        context.deleteDatabase(dbName);
+        System.exit(0);
     }
 
     public void addGameToHistory(ArrayList<Integer> problemIds, long[] times, int points) {

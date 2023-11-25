@@ -58,7 +58,7 @@
     <string name="settings">Settings</string>
     <string name="reset_problems_data">Reset problems data\n(click it if something is wrong with the app)</string>
     <string name="remove_data">Remove all personal data</string>
-    <string name="are_you_sure_you_want_to_delete_all_user_data">Are you sure you want to delete all user data?</string>
+    <string name="are_you_sure_you_want_to_delete_all_user_data">Are you sure you want to delete all user data? The app will close after this operation.</string>
     <string name="yes">Yes</string>
     <string name="cancel">Cancel</string>
 </resources>
