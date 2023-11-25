@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 
 import com.example.integralmefirst.R;
 import com.example.integralmefirst.gameshistory.GameData;
+import com.example.integralmefirst.problemshistory.ProblemData;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -22,7 +23,6 @@ import java.util.Collections;
 
 public class DBHelper extends SQLiteOpenHelper {
     private final Resources resources;
-    private final Context context;
     private static final String dbName = "integrals.db";
     public static final DBTable problemsTable = new DBTable("problems", new String[]{"id",
             "value", "difficulty", "user_solves_counter"});
@@ -37,7 +37,6 @@ public class DBHelper extends SQLiteOpenHelper {
     public DBHelper(@Nullable Context context) {
         super(context, dbName, null, 1);
         assert context != null;
-        this.context = context;
         resources = context.getResources();
         currentDBHelper = this;
     }
@@ -88,7 +87,6 @@ public class DBHelper extends SQLiteOpenHelper {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     private void insertData(SQLiteDatabase db) throws IOException {
@@ -200,7 +198,6 @@ public class DBHelper extends SQLiteOpenHelper {
         if (problemsIds.size() > problemsNumber) {
             problemsIds.subList(problemsNumber, problemsIds.size()).clear();
         }
-
         return problemsIds;
     }
 
@@ -227,9 +224,11 @@ public class DBHelper extends SQLiteOpenHelper {
         context.deleteDatabase(dbName);
     }
 
-    public void recreateDatabaseAndClose() {
-        context.deleteDatabase(dbName);
-        System.exit(0);
+    public void resetUserData() {
+        try (SQLiteDatabase db = getReadableDatabase()){
+            db.delete(gamesHistoryTable.name, null, null);
+            db.delete(gamesPointsTable.name, null, null);
+        }
     }
 
     public void addGameToHistory(ArrayList<Integer> problemIds, long[] times, int points) {
@@ -291,5 +290,30 @@ public class DBHelper extends SQLiteOpenHelper {
             }
         }
         return gamesHistoryArray;
+    }
+
+    public ArrayList<ProblemData> getProblemsHistory() {
+        ArrayList<ProblemData> problemData = new ArrayList<>();
+        try (SQLiteDatabase db = getReadableDatabase()) {
+            String query;
+            query = "SELECT " + problemsTable.getColWithTableName(1) + "," +
+                    " COUNT(" + gamesHistoryTable.getColWithTableName(0) + ")" + ", " +
+                    " AVG(" + gamesHistoryTable.getColWithTableName(2) + ")" + " FROM " +
+                    gamesPointsTable.name + " INNER JOIN " + gamesHistoryTable.name + " ON " +
+                    gamesPointsTable.getColWithTableName(0) + " = " +
+                    gamesHistoryTable.getColWithTableName(0) + " INNER JOIN " +
+                    problemsTable.name + " ON " + problemsTable.getColWithTableName(0) +
+                    " = " + gamesHistoryTable.getColWithTableName(1) + " GROUP BY " +
+                    problemsTable.getColWithTableName(0);
+            Cursor cursor = db.rawQuery(query, null);
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                problemData.add(new ProblemData(DBHelper.addDolar(cursor.getString(0)),
+                        cursor.getInt(1), cursor.getLong(2)));
+                cursor.moveToNext();
+            }
+            cursor.close();
+        }
+        return problemData;
     }
 }

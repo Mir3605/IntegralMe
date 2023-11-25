@@ -1,4 +1,4 @@
-package com.example.integralmefirst.gameshistory;
+package com.example.integralmefirst.problemshistory;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -11,33 +11,33 @@ import android.widget.Button;
 
 import com.example.integralmefirst.R;
 import com.example.integralmefirst.database.DBHelper;
-import com.example.integralmefirst.problemshistory.ProblemsHistoryActivity;
-import com.example.integralmefirst.settings.SettingsActivity;
+import com.example.integralmefirst.gameshistory.GamesHistoryActivity;
 
 import java.util.ArrayList;
 
-public class GamesHistoryActivity extends AppCompatActivity {
+public class ProblemsHistoryActivity extends AppCompatActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_games_history);
+        setContentView(R.layout.activity_problems_history);
+
         DBHelper helper = DBHelper.getCurrentDBHelper();
-        ArrayList<GameData> gamesHistory = helper.getGamesHistory();
-        RecyclerView recyclerView = findViewById(R.id.GamesHistoryRecyclerView);
-        GamesRecViewAdapter adapter = new GamesRecViewAdapter(this);
-        adapter.setGamesHistory(gamesHistory);
+        ArrayList<ProblemData> problemsHistory = helper.getProblemsHistory();
+        RecyclerView recyclerView = findViewById(R.id.ProblemsStatsRecyclerView);
+        ProblemsRecViewAdapter adapter = new ProblemsRecViewAdapter();
+        adapter.setProblemsHistory(problemsHistory);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        Button switchToProblemsButton = findViewById(R.id.SwitchToProblems);
-        switchToProblemsButton.setOnClickListener(new View.OnClickListener() {
+
+        Button switchToGamesButton = findViewById(R.id.SwitchToGames);
+        switchToGamesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(GamesHistoryActivity.this, ProblemsHistoryActivity.class);
+                Intent intent = new Intent(ProblemsHistoryActivity.this, GamesHistoryActivity.class);
                 startActivity(intent);
                 finish();
             }
         });
-
-
     }
 }

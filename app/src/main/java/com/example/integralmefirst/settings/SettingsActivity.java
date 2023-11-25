@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.integralmefirst.R;
 import com.example.integralmefirst.database.DBHelper;
@@ -22,6 +23,8 @@ public class SettingsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 DBHelper helper = DBHelper.getCurrentDBHelper();
                 helper.reloadAnswersAndProblems();
+                Toast toast = Toast.makeText(SettingsActivity.this, R.string.reset_successful, Toast.LENGTH_SHORT);
+                toast.show();
             }
         });
 
@@ -36,7 +39,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void showAreYouSureDialog() {
-        AreYouSureDialog dialog = new AreYouSureDialog();
+        AreYouSureDialog dialog = new AreYouSureDialog(this);
         dialog.show(getSupportFragmentManager(), "AreYouSureDialog");
     }
 }
