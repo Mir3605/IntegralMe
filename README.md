@@ -46,4 +46,4 @@ This application was entirely created in Android Studio by me. All of the math s
 
 ## License
 
-
+License is avaliable [here](LICENSE)
