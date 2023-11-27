@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 import katex.hourglass.in.mathlib.MathView;
 
-public class ProblemsRecViewAdapter extends RecyclerView.Adapter<ProblemsRecViewAdapter.ViewHolder>{
+public class ProblemsRecViewAdapter extends RecyclerView.Adapter<ProblemsRecViewAdapter.ViewHolder> {
     ArrayList<ProblemData> problemsHistory;
 
     public void setProblemsHistory(ArrayList<ProblemData> problemsHistory) {
@@ -46,6 +46,7 @@ public class ProblemsRecViewAdapter extends RecyclerView.Adapter<ProblemsRecView
         private MathView problem;
         private TextView avgTime;
         private TextView tries;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             problem = itemView.findViewById(R.id.ProblemInProblems);
