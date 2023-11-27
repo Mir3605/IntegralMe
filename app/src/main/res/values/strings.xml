@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">IntegralMeFirst</string>
+    <string name="app_name">IntegralMe</string>
     <string name="back">Back</string>
     <string name="welcome_text">Welcome to IntegralMe!</string>
     <string name="example_integral">$\int \frac{1}{x} dx $</string>
