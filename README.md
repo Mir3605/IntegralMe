@@ -1,8 +1,12 @@
 # IntegralMe
-This project is an application designed to teach indefinite integrals. This issue is very important for students, who want to become engineers one day. 
+This project is an application designed to teach indefinite integrals. This issue is very important for students, who are on their way to become engineers one day. The app was designed to be minimalistic and simple to use in order to avoid distractions.
 
 ## Instalation
-One way to install the app is to download Android Studio and use the play button, when connected to target device in debug mode. Here are more detailed steps to do so:
+
+There are two ways to install the app. First is to install Android Studio and open the app with it. Second (easier one) is to download the .apk file.
+
+### With Android Studio
+Download Android Studio and use the play button, when connected to target device in debug mode. Here are more detailed steps to do so:
 
 1. Enable debug mode on your Android device. Click [here](https://developer.android.com/studio/debug/dev-options "Android Studio documentation") if you want to find out about the details. 
 
@@ -12,13 +16,17 @@ One way to install the app is to download Android Studio and use the play button
 
 4. Open unzipped, downloaded code with Android Studio as a project.
 
-5. Connect your mobile device via USB to the computer. Allow permissions on your device (if the popup appears). 
+5. Connect your mobile device via USB to the computer. Allow necessary permissions on your device (if the popup appears). 
 
 6. Press play in Android Studio. The app will be installed and turned on. You can disconnect your device and enjoy the app. 
 
-Other possibility: ?
+### .apk file
+
+Simply download .apk file from [here](app/release/IntegralMe.apk "IntegralMe.apk") and install it on your mobile device. [This simple tutorial](https://www.youtube.com/watch?v=N0M4XGkpCn4) might help you.
 
 ## Usage
+
+The app offers four different views, which are briefly described below. 
 
 ### Main menu
 
