@@ -46,14 +46,14 @@
 19,5,\frac{1}{2}x(sin(lnx) - cos(lnx)) + c
 20,1,\int \frac{cosx}{ln(sinx)sinx}dx 
 20,2,\begin{vmatrix} t = sinx \\ dt = cosxdx  \end{vmatrix}
-20,3,\frac{1}{tlnt}dt
+20,3,\int \frac{1}{tlnt}dt
 20,4,\begin{vmatrix} u = lnt \\ du = \frac{1}{t}dt \end{vmatrix}
 20,5,\int \frac{1}{u}du
 20,6,lnu + c
 20,7,ln(ln(sinx)) + c
 21,1,\int \frac{e^x}{e^{2x}+1}dx
 21,2,\begin{vmatrix} t = e^x \\  dt = e^xdx \end{vmatrix}
-21,3,\frac{1}{t^2 + 1}dt
+21,3,\int \frac{1}{t^2 + 1}dt
 21,4,arctgt + c
 21,5,arctg(e^x) + c
 22,1,\begin{vmatrix} u = arcsinx & \frac{dv}{dt} = 1 \\  \frac{du}{dt} = \frac{1}{\sqrt{1 - x^2}} & v = x \end{vmatrix}
