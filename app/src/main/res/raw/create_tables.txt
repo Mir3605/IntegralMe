@@ -29,4 +29,7 @@ CREATE TABLE games_history (
   FOREIGN KEY (game_id)
            REFERENCES games_points(id)
 );
-
+=
+CREATE TABLE stages_number (
+  number integer
+);

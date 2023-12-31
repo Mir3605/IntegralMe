@@ -26,4 +26,5 @@
     <string name="problem">Problem</string>
     <string name="tries">Tries</string>
     <string name="average_time">Average time</string>
+    <string name="set_integrals_number_per_level">Set integrals number per level:</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.example.integralmefirst.settings;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -9,6 +10,8 @@ import android.widget.Toast;
 
 import com.example.integralmefirst.R;
 import com.example.integralmefirst.database.DBHelper;
+import com.example.integralmefirst.mainmenu.MainActivity;
+import com.google.android.material.slider.Slider;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -35,7 +38,19 @@ public class SettingsActivity extends AppCompatActivity {
                 showAreYouSureDialog();
             }
         });
+        Slider slider = findViewById(R.id.SetIntegralsNumberBar);
+        slider.setValue(MainActivity.getStagesInLevel());
+        slider.addOnSliderTouchListener(new Slider.OnSliderTouchListener() {
+            @Override
+            public void onStartTrackingTouch(@NonNull Slider slider) {
 
+            }
+
+            @Override
+            public void onStopTrackingTouch(@NonNull Slider slider) {
+                MainActivity.setStagesInLevel((int) slider.getValue());
+            }
+        });
     }
 
     private void showAreYouSureDialog() {

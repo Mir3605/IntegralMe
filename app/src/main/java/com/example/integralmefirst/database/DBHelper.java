@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 
 import com.example.integralmefirst.R;
 import com.example.integralmefirst.gameshistory.GameData;
+import com.example.integralmefirst.mainmenu.MainActivity;
 import com.example.integralmefirst.problemshistory.ProblemData;
 
 import java.io.BufferedReader;
@@ -24,6 +25,7 @@ import java.util.Collections;
 public class DBHelper extends SQLiteOpenHelper {
     private final Resources resources;
     private static final String dbName = "integrals.db";
+    private static final int dbVersion = 2;
     public static final DBTable problemsTable = new DBTable("problems", new String[]{"id",
             "value", "difficulty", "user_solves_counter"});
     public static final DBTable answersTable = new DBTable("answers", new String[]{"id",
@@ -32,10 +34,11 @@ public class DBHelper extends SQLiteOpenHelper {
             "problem_id", "time"});
     public static final DBTable gamesPointsTable = new DBTable("games_points", new String[]{"id",
             "points", "date"});
+    public static final DBTable stagesNumberTable = new DBTable("stages_number", new String[]{"number"});
     private static DBHelper currentDBHelper;
 
     public DBHelper(@Nullable Context context) {
-        super(context, dbName, null, 1);
+        super(context, dbName, null, dbVersion);
         assert context != null;
         resources = context.getResources();
         currentDBHelper = this;
@@ -80,7 +83,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public void reloadAnswersAndProblems() {
-        try (SQLiteDatabase db = getReadableDatabase()) {
+        try (SQLiteDatabase db = getWritableDatabase()) {
             db.delete(problemsTable.name, null, null);
             db.delete(answersTable.name, null, null);
             insertData(db);
@@ -118,6 +121,7 @@ public class DBHelper extends SQLiteOpenHelper {
             values.put(answersTable.col[3], value);
             db.insert(answersTable.name, null, values);
         }
+        changeStagesNumberInDatabase(db, MainActivity.getStagesInLevel());
     }
 
     public ArrayList<String> getAnswers(int problemId) {
@@ -136,7 +140,7 @@ public class DBHelper extends SQLiteOpenHelper {
             }
             cursor.close();
         }
-        answers.replaceAll(DBHelper::addDolar);
+        answers.replaceAll(DBHelper::addDollar);
         return answers;
     }
 
@@ -168,11 +172,11 @@ public class DBHelper extends SQLiteOpenHelper {
         Collections.shuffle(answers);
         if (answers.size() > numberOfAnswers)
             answers.subList(numberOfAnswers, answers.size()).clear();
-        answers.replaceAll(DBHelper::addDolar);
+        answers.replaceAll(DBHelper::addDollar);
         return answers;
     }
 
-    private static String addDolar(String s) {
+    private static String addDollar(String s) {
         return "$" + s + "$";
     }
 
@@ -212,12 +216,46 @@ public class DBHelper extends SQLiteOpenHelper {
             }
             cursor.close();
         }
-        return addDolar(value);
+        return addDollar(value);
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        if (oldVersion < 2) {
+            onUpgrade2(db);
+        }
+    }
 
+    private void onUpgrade2(SQLiteDatabase db) {
+        String query = "CREATE TABLE stages_number ( number integer );";
+        db.execSQL(query);
+        changeStagesNumberInDatabase(db, MainActivity.getStagesInLevel());
+    }
+
+    public void changeStagesNumberInDatabase(int number) {
+        try (SQLiteDatabase db = getWritableDatabase()) {
+            changeStagesNumberInDatabase(db, number);
+        }
+    }
+
+    private void changeStagesNumberInDatabase(SQLiteDatabase db, int number) {
+        db.delete(stagesNumberTable.name, null, null);
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(stagesNumberTable.col[0], number);
+        db.insert(stagesNumberTable.name, null, contentValues);
+    }
+
+    public int getStagesNumber() {
+        int value = -1;
+        try (SQLiteDatabase db = getReadableDatabase()) {
+            String query = "SELECT * FROM " + stagesNumberTable.name;
+            Cursor cursor = db.rawQuery(query, null);
+            if (cursor.moveToFirst()) {
+                value = cursor.getInt(0);
+            }
+            cursor.close();
+        }
+        return value;
     }
 
     public static void removeDatabase(Context context) {
@@ -225,7 +263,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public void resetUserData() {
-        try (SQLiteDatabase db = getReadableDatabase()){
+        try (SQLiteDatabase db = getReadableDatabase()) {
             db.delete(gamesHistoryTable.name, null, null);
             db.delete(gamesPointsTable.name, null, null);
         }
@@ -285,7 +323,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     cursor.moveToNext();
                 }
                 cursor.close();
-                problems.replaceAll(DBHelper::addDolar);
+                problems.replaceAll(DBHelper::addDollar);
                 gamesHistoryArray.add(new GameData(problems, points, times, date));
             }
         }
@@ -308,7 +346,7 @@ public class DBHelper extends SQLiteOpenHelper {
             Cursor cursor = db.rawQuery(query, null);
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
-                problemData.add(new ProblemData(DBHelper.addDolar(cursor.getString(0)),
+                problemData.add(new ProblemData(DBHelper.addDollar(cursor.getString(0)),
                         cursor.getInt(1), cursor.getLong(2)));
                 cursor.moveToNext();
             }

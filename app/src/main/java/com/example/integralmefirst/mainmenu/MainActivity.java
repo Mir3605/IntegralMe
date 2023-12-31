@@ -18,13 +18,23 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     public static final int difficultyLevelsNumber = 3;
-    public static final int stagesInLevel = 3;
+    private static int stagesInLevel = 3;
+
+    public static int getStagesInLevel() {
+        return stagesInLevel;
+    }
+
+    public static void setStagesInLevel(int stagesInLevel) {
+        MainActivity.stagesInLevel = stagesInLevel;
+        DBHelper.getCurrentDBHelper().changeStagesNumberInDatabase(stagesInLevel);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         DBHelper helper = new DBHelper(this); // DBHelper should be initialized at the beginning of the program
+        setStagesInLevel(helper.getStagesNumber());
         RecyclerView chooseLvlRecView = findViewById(R.id.ChooseLvlRecView);
 
         ArrayList<Lvl> lvlsArray = new ArrayList<>();

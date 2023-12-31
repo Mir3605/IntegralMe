@@ -33,4 +33,23 @@
         android:layout_centerHorizontal="true"
         android:layout_margin="@dimen/Margin_between_buttons_main_activity"
         android:text="@string/remove_data" />
+
+    <TextView
+        android:id="@+id/SetIntegralsNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/RemoveDataButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:text="@string/set_integrals_number_per_level" />
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/SetIntegralsNumberBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/SetIntegralsNumber"
+        android:stepSize="1"
+        android:valueFrom="1"
+        android:valueTo="6"
+        app:labelBehavior="visible" />
 </RelativeLayout>

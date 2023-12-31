@@ -41,11 +41,11 @@ public class LevelsRecViewAdapter extends RecyclerView.Adapter<LevelsRecViewAdap
                     public void onClick(View view) {
                         DBHelper helper = DBHelper.getCurrentDBHelper();
                         ArrayList<Integer> problemIds = helper.getRandomProblemsIds(
-                                MainActivity.stagesInLevel, lvl.getDifficulty());
+                                MainActivity.getStagesInLevel(), lvl.getDifficulty());
                         Intent intent = new Intent(mainActivity, LevelActivity.class);
                         intent.putExtra("difficulty", lvl.getDifficulty());
                         intent.putExtra("chosenProblems", problemIds);
-                        intent.putExtra("timeList", new long[MainActivity.stagesInLevel]);
+                        intent.putExtra("timeList", new long[MainActivity.getStagesInLevel()]);
                         mainActivity.startActivity(intent);
                     }
                 }
