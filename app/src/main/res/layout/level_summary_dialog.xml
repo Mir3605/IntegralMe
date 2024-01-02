@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/LevelSummaryRelativeLayout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/levelSummaryHeadline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="@dimen/title_margin_bottom"
+        android:text="@string/level_summary"
+        android:textSize="@dimen/title_size" />
+
+    <include
+        android:id="@+id/cardInSummary"
+        layout="@layout/game_history_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/levelSummaryHeadline" />
+
+    <TextView
+        android:id="@+id/PressAnywhereToCloseSummary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cardInSummary"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"
+        android:text="@string/press_anywhere_to_close" />
+
+</RelativeLayout>

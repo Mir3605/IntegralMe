@@ -4,18 +4,25 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.integralmefirst.R;
 import com.example.integralmefirst.database.DBHelper;
+import com.example.integralmefirst.gameshistory.GameData;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Objects;
 
 import katex.hourglass.in.mathlib.MathView;
 
@@ -112,8 +119,7 @@ public class LevelActivity extends AppCompatActivity {
                     series++;
                     timeList[currentStageNumber - 1] = System.currentTimeMillis() - startTime;
                     if (currentStageNumber >= lastStageNumber) {
-                        helper.addGameToHistory(problemIds, timeList, points);
-                        finish();
+                        finishLevel();
                     } else {
                         moveToNextStage();
                     }
@@ -128,6 +134,32 @@ public class LevelActivity extends AppCompatActivity {
     private void updateStage() {
         String newStageText = currentStageNumber + "/" + lastStageNumber;
         stage.setText(newStageText);
+    }
+
+    private void finishLevel() {
+        helper.addGameToHistory(problemIds, timeList, points);
+        GameData gameData = helper.getNewestGameStats();
+        LevelSummaryDialog dialog = new LevelSummaryDialog(gameData);
+        dialog.show(getSupportFragmentManager(), "LevelSummaryDialog");
+        getSupportFragmentManager().executePendingTransactions();
+        Dialog dialog1 = dialog.getDialog();
+        if (dialog1 != null){
+            Window window = dialog1.getWindow();
+            if (window != null){
+                window.getDecorView().setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View view, MotionEvent motionEvent) {
+                        finish();
+                        return true;
+                    }
+                });
+                Log.i("LevelActivity", "Successfully overrode onTouch");
+            }
+            else
+                Log.i("LevelActivity", "dialog.getDialog().getWindow() produced null");
+        }
+        else
+            Log.i("LevelActivity", "dialog.getDialog() produced null");
     }
 
     private void moveToNextStage() {

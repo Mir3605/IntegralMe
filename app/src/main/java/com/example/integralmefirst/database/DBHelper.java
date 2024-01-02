@@ -285,6 +285,9 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
+    public GameData getNewestGameStats() {
+        return getGamesHistory().get(0); // todo fix
+    }
     public ArrayList<GameData> getGamesHistory() {
         ArrayList<GameData> gamesHistoryArray = new ArrayList<>();
         try (SQLiteDatabase db = getReadableDatabase()) {
@@ -310,7 +313,8 @@ public class DBHelper extends SQLiteOpenHelper {
                         gamesHistoryTable.getColWithTableName(0) + " INNER JOIN " +
                         problemsTable.name + " ON " + problemsTable.getColWithTableName(0) +
                         " = " + gamesHistoryTable.getColWithTableName(1) + " WHERE " +
-                        gamesPointsTable.getColWithTableName(0) + " = " + gameId;
+                        gamesPointsTable.getColWithTableName(0) + " = " + gameId +
+                        " ORDER BY " + gamesPointsTable.getColWithTableName(2) + " DESC;";
                 cursor = db.rawQuery(query, null);
                 cursor.moveToFirst();
                 ArrayList<String> problems = new ArrayList<>();

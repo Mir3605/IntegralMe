@@ -34,7 +34,7 @@ public class GamesRecViewAdapter extends RecyclerView.Adapter<GamesRecViewAdapte
         System.out.println(gamesHistory.get(position).getPoints());
         String pointsText = gamesHistoryActivity.getString(R.string.score) + " " + gamesHistory.get(position).getPoints();
         holder.points.setText(pointsText);
-        ProblemTimeRecViewAdapter adapter = new ProblemTimeRecViewAdapter();
+        GameCardRecViewAdapter adapter = new GameCardRecViewAdapter();
         adapter.setTimesAndProblems(gamesHistory.get(position).getTimes(), gamesHistory.get(position).getProblems());
         holder.problemTimeRecyclerView.setAdapter(adapter);
         holder.problemTimeRecyclerView.setLayoutManager(new LinearLayoutManager(gamesHistoryActivity));
@@ -52,9 +52,9 @@ public class GamesRecViewAdapter extends RecyclerView.Adapter<GamesRecViewAdapte
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            points = itemView.findViewById(R.id.Points);
-            date = itemView.findViewById(R.id.Date);
-            problemTimeRecyclerView = itemView.findViewById(R.id.ProblemTimeRecView);
+            points = itemView.findViewById(R.id.PointsGameCard);
+            date = itemView.findViewById(R.id.DateGameCard);
+            problemTimeRecyclerView = itemView.findViewById(R.id.GameCardRecyclerView);
         }
     }
 

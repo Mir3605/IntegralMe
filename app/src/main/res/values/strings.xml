@@ -27,4 +27,6 @@
     <string name="tries">Tries</string>
     <string name="average_time">Average time</string>
     <string name="set_integrals_number_per_level">Set integrals number per level:</string>
+    <string name="level_summary">Level summary</string>
+    <string name="press_anywhere_to_close">Press anywhere to close</string>
 </resources>
