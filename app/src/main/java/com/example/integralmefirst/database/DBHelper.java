@@ -286,8 +286,9 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public GameData getNewestGameStats() {
-        return getGamesHistory().get(0); 
+        return getGamesHistory().get(0);
     }
+
     public ArrayList<GameData> getGamesHistory() {
         ArrayList<GameData> gamesHistoryArray = new ArrayList<>();
         try (SQLiteDatabase db = getReadableDatabase()) {
