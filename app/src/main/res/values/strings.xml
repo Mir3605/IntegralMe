@@ -29,4 +29,6 @@
     <string name="set_integrals_number_per_level">Set integrals number per level:</string>
     <string name="level_summary">Level summary</string>
     <string name="press_anywhere_to_close">Press anywhere to close</string>
+    <string name="move_chosen_answer_string">Move chosen answer back to answers pool on click</string>
+    <string name="order_games_history_string">Order games history from newest to oldest</string>
 </resources>

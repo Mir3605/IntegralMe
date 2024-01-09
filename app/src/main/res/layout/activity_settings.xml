@@ -34,22 +34,94 @@
         android:layout_margin="@dimen/Margin_between_buttons_main_activity"
         android:text="@string/remove_data" />
 
-    <TextView
-        android:id="@+id/SetIntegralsNumber"
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/SetIntegralsNumberCard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/RemoveDataButton"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp"
-        android:text="@string/set_integrals_number_per_level" />
+        android:layout_margin="8dp"
+        android:padding="4dp"
+        app:cardCornerRadius="4dp"
+        app:cardElevation="5dp">
 
-    <com.google.android.material.slider.Slider
-        android:id="@+id/SetIntegralsNumberBar"
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/SetIntegralsNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="15dp"
+                android:text="@string/set_integrals_number_per_level" />
+
+            <com.google.android.material.slider.Slider
+                android:id="@+id/SetIntegralsNumberBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/SetIntegralsNumber"
+                android:stepSize="1"
+                android:valueFrom="1"
+                android:valueTo="6"
+                app:labelBehavior="visible"
+                android:contentDescription="@string/set_integrals_number_per_level" />
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/SwitchSettingsCard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/SetIntegralsNumber"
-        android:stepSize="1"
-        android:valueFrom="1"
-        android:valueTo="6"
-        app:labelBehavior="visible" />
+        android:layout_below="@id/SetIntegralsNumberCard"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="8dp"
+        android:padding="4dp"
+        app:cardCornerRadius="4dp"
+        app:cardElevation="5dp">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/MoveTextSwtich"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:contentDescription="@string/move_chosen_answer_string" />
+
+            <TextView
+                android:id="@+id/MoveTextTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_toEndOf="@+id/MoveTextSwtich"
+                android:text="@string/move_chosen_answer_string"
+                android:textAlignment="center" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/OrderGamesSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/MoveTextTextView"
+                android:layout_margin="5dp"
+                android:contentDescription="@string/order_games_history_string" />
+
+            <TextView
+                android:id="@+id/OrderGamesTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/MoveTextTextView"
+                android:layout_toEndOf="@+id/OrderGamesSwitch"
+                android:text="@string/order_games_history_string"
+                android:textAlignment="center" />
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+
 </RelativeLayout>
