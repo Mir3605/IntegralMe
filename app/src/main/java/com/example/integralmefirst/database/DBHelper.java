@@ -237,12 +237,13 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     private void insertDefaultSettingsValues(SQLiteDatabase db) {
+        db.delete(settingsTable.name, null, null);
         ContentValues values = new ContentValues();
         values.put(settingsTable.col[1], Settings.STAGES_PER_LEVEL.toString());
-        values.put(settingsTable.col[2], Settings.getStagesPerLevel());
+        values.put(settingsTable.col[2], 3);
         db.insert(settingsTable.name, null, values);
         values = new ContentValues();
-        values.put(settingsTable.col[1], Settings.CHRONOLOGICAL_ORDER_GAMES_HISTORY.toString());
+        values.put(settingsTable.col[1], Settings.FROM_NEWEST_GAMES_HISTORY.toString());
         values.put(settingsTable.col[2], 1);
         db.insert(settingsTable.name, null, values);
         values = new ContentValues();
@@ -309,10 +310,10 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public GameData getNewestGameStats() {
-        return getGamesHistory().get(0);
+        return getGamesHistory(true).get(0);
     }
 
-    public ArrayList<GameData> getGamesHistory() {
+    public ArrayList<GameData> getGamesHistory(boolean fromNewest) {
         ArrayList<GameData> gamesHistoryArray = new ArrayList<>();
         try (SQLiteDatabase db = getReadableDatabase()) {
             ArrayList<Integer> gamesIds = new ArrayList<>();
