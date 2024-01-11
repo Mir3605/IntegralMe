@@ -1,8 +1,11 @@
 package com.example.integralmefirst.mainmenu;
 
-public class Lvl {
-    private int difficulty;
+import androidx.annotation.NonNull;
 
+public class Lvl {
+    private final int difficulty;
+
+    @NonNull
     @Override
     public String toString() {
         return "Level " + difficulty;

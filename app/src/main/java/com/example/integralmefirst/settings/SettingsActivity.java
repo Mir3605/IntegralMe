@@ -39,7 +39,7 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
         Slider slider = findViewById(R.id.SetIntegralsNumberBar);
-        slider.setValue(MainActivity.getStagesInLevel());
+        slider.setValue(Settings.getStagesPerLevel());
         slider.addOnSliderTouchListener(new Slider.OnSliderTouchListener() {
             @Override
             public void onStartTrackingTouch(@NonNull Slider slider) {
@@ -48,7 +48,7 @@ public class SettingsActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(@NonNull Slider slider) {
-                MainActivity.setStagesInLevel((int) slider.getValue());
+                Settings.setStagesPerLevel((int) slider.getValue());
             }
         });
     }

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.integralmefirst.level.LevelActivity;
 import com.example.integralmefirst.R;
 import com.example.integralmefirst.database.DBHelper;
+import com.example.integralmefirst.settings.Settings;
 
 import java.util.ArrayList;
 
@@ -41,11 +42,11 @@ public class LevelsRecViewAdapter extends RecyclerView.Adapter<LevelsRecViewAdap
                     public void onClick(View view) {
                         DBHelper helper = DBHelper.getCurrentDBHelper();
                         ArrayList<Integer> problemIds = helper.getRandomProblemsIds(
-                                MainActivity.getStagesInLevel(), lvl.getDifficulty());
+                                Settings.getStagesPerLevel(), lvl.getDifficulty());
                         Intent intent = new Intent(mainActivity, LevelActivity.class);
                         intent.putExtra("difficulty", lvl.getDifficulty());
                         intent.putExtra("chosenProblems", problemIds);
-                        intent.putExtra("timeList", new long[MainActivity.getStagesInLevel()]);
+                        intent.putExtra("timeList", new long[Settings.getStagesPerLevel()]);
                         mainActivity.startActivity(intent);
                     }
                 }
