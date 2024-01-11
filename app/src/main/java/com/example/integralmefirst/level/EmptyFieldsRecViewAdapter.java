@@ -10,6 +10,7 @@ import androidx.appcompat.content.res.AppCompatResources;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.integralmefirst.R;
+import com.example.integralmefirst.settings.Settings;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -48,12 +49,21 @@ public class EmptyFieldsRecViewAdapter extends RecyclerView.Adapter<EmptyFieldsR
             @Override
             public void onClick(View view) {
                 MathRadioButton button = (MathRadioButton) view;
+                int currentPosition = holder.getAdapterPosition();
+                if (!LevelActivity.emptyMathField.equals(fields.get(currentPosition)) &&
+                        Settings.isReturnOnClick()) {
+                    levelActivity.addToAnswers(fields.get(currentPosition));
+                    fields.set(currentPosition, LevelActivity.emptyMathField);
+                }
                 if (!button.isChecked()) {
                     int oldSelectedPosition = selectedPosition;
-                    selectedPosition = holder.getAdapterPosition();
+                    selectedPosition = currentPosition;
                     button.setChecked(true);
                     notifyItemChanged(oldSelectedPosition);
                     notifyItemChanged(selectedPosition);
+                }
+                else {
+                    notifyItemChanged(currentPosition);
                 }
             }
         });

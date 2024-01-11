@@ -37,7 +37,7 @@ public class AnswersRecViewAdapter extends RecyclerView.Adapter<AnswersRecViewAd
             @Override
             public void onClick(View view) {
                 String receivedData = levelActivity.setSelectedEmptyField(field);
-                if (Objects.equals(receivedData, "$\\,$")){
+                if (Objects.equals(receivedData, LevelActivity.emptyMathField)){
                     fields.remove(field);
                     notifyItemRangeRemoved(holder.getAdapterPosition(), 1);
                 }
@@ -63,5 +63,12 @@ public class AnswersRecViewAdapter extends RecyclerView.Adapter<AnswersRecViewAd
     public void setAnswers(ArrayList<String> answerList) {
         this.fields = answerList;
         notifyDataSetChanged();
+    }
+
+    public void addAnswer(String answer) {
+        if (LevelActivity.emptyMathField.equals(answer))
+            return;
+        fields.add(answer);
+        notifyItemInserted(fields.size()-1);
     }
 }
