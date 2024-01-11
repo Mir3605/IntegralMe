@@ -318,7 +318,11 @@ public class DBHelper extends SQLiteOpenHelper {
         try (SQLiteDatabase db = getReadableDatabase()) {
             ArrayList<Integer> gamesIds = new ArrayList<>();
             String query = "SELECT " + gamesPointsTable.col[0] + " FROM " + gamesPointsTable.name +
-                    " ORDER BY " + gamesPointsTable.col[0] + " DESC;";
+                    " ORDER BY " + gamesPointsTable.col[0];
+            if (fromNewest)
+                query += " DESC;";
+            else
+                query += " ASC;";
             Cursor cursor = db.rawQuery(query, null);
             if (cursor.moveToFirst()) {
                 Integer value = cursor.getInt(0);
