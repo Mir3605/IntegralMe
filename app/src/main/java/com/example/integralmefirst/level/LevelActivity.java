@@ -1,18 +1,23 @@
 package com.example.integralmefirst.level;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.integralmefirst.R;
 import com.example.integralmefirst.database.DBHelper;
+import com.example.integralmefirst.gameshistory.GameData;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,6 +26,7 @@ import katex.hourglass.in.mathlib.MathView;
 
 public class LevelActivity extends AppCompatActivity {
     public static final int seriesMultiplier = 20;
+    public static final String emptyMathField = "$\\,$";
     private int lastStageNumber;
     private long startTime;
     private long[] timeList;
@@ -31,6 +37,7 @@ public class LevelActivity extends AppCompatActivity {
     private int series;
     private ArrayList<String> correctAnswers;
     private EmptyFieldsRecViewAdapter emptyFieldsRecViewAdapter;
+    private AnswersRecViewAdapter answersRecViewAdapter;
     private TextView stage;
     private DBHelper helper;
 
@@ -78,7 +85,7 @@ public class LevelActivity extends AppCompatActivity {
         int operationsNumber = correctAnswers.size();
         ArrayList<String> emptyFieldsValues = new ArrayList<>();
         for (int i = 0; i < operationsNumber; i++) {
-            emptyFieldsValues.add("$\\,$");
+            emptyFieldsValues.add(emptyMathField);
         }
         emptyFieldsRecViewAdapter = new EmptyFieldsRecViewAdapter(this);
         emptyFieldsRecViewAdapter.setEmptyFields(emptyFieldsValues);
@@ -94,7 +101,7 @@ public class LevelActivity extends AppCompatActivity {
         else
             answersValues.addAll(helper.getRandomAnswersExcludingCorrect(difficulty, 2, problemId));
         Collections.shuffle(answersValues);
-        AnswersRecViewAdapter answersRecViewAdapter = new AnswersRecViewAdapter(this);
+        answersRecViewAdapter = new AnswersRecViewAdapter(this);
         answersRecViewAdapter.setAnswers(answersValues);
         RecyclerView answersRecView = findViewById(R.id.AnswersRecyclerView);
         answersRecView.setAdapter(answersRecViewAdapter);
@@ -112,8 +119,7 @@ public class LevelActivity extends AppCompatActivity {
                     series++;
                     timeList[currentStageNumber - 1] = System.currentTimeMillis() - startTime;
                     if (currentStageNumber >= lastStageNumber) {
-                        helper.addGameToHistory(problemIds, timeList, points);
-                        finish();
+                        finishLevel();
                     } else {
                         moveToNextStage();
                     }
@@ -128,6 +134,32 @@ public class LevelActivity extends AppCompatActivity {
     private void updateStage() {
         String newStageText = currentStageNumber + "/" + lastStageNumber;
         stage.setText(newStageText);
+    }
+
+    private void finishLevel() {
+        helper.addGameToHistory(problemIds, timeList, points);
+        GameData gameData = helper.getNewestGameStats();
+        LevelSummaryDialog dialog = new LevelSummaryDialog(gameData);
+        dialog.show(getSupportFragmentManager(), "LevelSummaryDialog");
+        getSupportFragmentManager().executePendingTransactions();
+        Dialog dialog1 = dialog.getDialog();
+        if (dialog1 != null){
+            Window window = dialog1.getWindow();
+            if (window != null){
+                window.getDecorView().setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View view, MotionEvent motionEvent) {
+                        finish();
+                        return true;
+                    }
+                });
+                Log.i("LevelActivity", "Successfully overrode onTouch");
+            }
+            else
+                Log.i("LevelActivity", "dialog.getDialog().getWindow() produced null");
+        }
+        else
+            Log.i("LevelActivity", "dialog.getDialog() produced null");
     }
 
     private void moveToNextStage() {
@@ -160,5 +192,9 @@ public class LevelActivity extends AppCompatActivity {
         Toast toast = Toast.makeText(this, getString(R.string.correct_answer_toast_text) +
                 series * seriesMultiplier, Toast.LENGTH_SHORT);
         toast.show();
+    }
+
+    void addToAnswers(String answer) {
+        answersRecViewAdapter.addAnswer(answer);
     }
 }

@@ -30,6 +30,8 @@ CREATE TABLE games_history (
            REFERENCES games_points(id)
 );
 =
-CREATE TABLE stages_number (
-  number integer
+CREATE TABLE settings (
+  id integer PRIMARY KEY,
+  name text,
+  value integer
 );

@@ -11,12 +11,13 @@
     app:cardElevation="15dp">
 
     <RelativeLayout
+        android:id="@+id/GameCardRelativeLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="4dp">
 
         <TextView
-            android:id="@+id/Points"
+            android:id="@+id/PointsGameCard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
@@ -24,7 +25,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/Date"
+            android:id="@+id/DateGameCard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -32,29 +33,35 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/ProblemsWord"
+            android:id="@+id/ProblemsWordGameCard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/Points"
+            android:layout_below="@id/PointsGameCard"
             android:layout_alignParentStart="true"
             android:text="@string/problems" />
 
         <TextView
-            android:id="@+id/TimesWord"
+            android:id="@+id/TimesWordGameCard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/Date"
+            android:layout_below="@id/DateGameCard"
             android:layout_alignParentEnd="true"
             android:text="@string/times" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/ProblemTimeRecView"
+            android:id="@+id/GameCardRecyclerView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/ProblemsWord"
+            android:layout_below="@id/ProblemsWordGameCard"
             android:layout_marginTop="10dp"
             tools:listitem="@layout/problem_time" />
 
     </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/OverlapOfGameCardRelativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent" />
 
 </androidx.cardview.widget.CardView>

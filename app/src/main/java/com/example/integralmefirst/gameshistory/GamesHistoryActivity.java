@@ -12,7 +12,7 @@ import android.widget.Button;
 import com.example.integralmefirst.R;
 import com.example.integralmefirst.database.DBHelper;
 import com.example.integralmefirst.problemshistory.ProblemsHistoryActivity;
-import com.example.integralmefirst.settings.SettingsActivity;
+import com.example.integralmefirst.settings.Settings;
 
 import java.util.ArrayList;
 
@@ -22,7 +22,7 @@ public class GamesHistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_games_history);
         DBHelper helper = DBHelper.getCurrentDBHelper();
-        ArrayList<GameData> gamesHistory = helper.getGamesHistory();
+        ArrayList<GameData> gamesHistory = helper.getGamesHistory(Settings.getFromNewestGamesHistory());
         RecyclerView recyclerView = findViewById(R.id.GamesHistoryRecyclerView);
         GamesRecViewAdapter adapter = new GamesRecViewAdapter(this);
         adapter.setGamesHistory(gamesHistory);

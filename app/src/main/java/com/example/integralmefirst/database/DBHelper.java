@@ -11,8 +11,8 @@ import androidx.annotation.Nullable;
 
 import com.example.integralmefirst.R;
 import com.example.integralmefirst.gameshistory.GameData;
-import com.example.integralmefirst.mainmenu.MainActivity;
 import com.example.integralmefirst.problemshistory.ProblemData;
+import com.example.integralmefirst.settings.Settings;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -25,7 +25,7 @@ import java.util.Collections;
 public class DBHelper extends SQLiteOpenHelper {
     private final Resources resources;
     private static final String dbName = "integrals.db";
-    private static final int dbVersion = 2;
+    private static final int dbVersion = 3;
     public static final DBTable problemsTable = new DBTable("problems", new String[]{"id",
             "value", "difficulty", "user_solves_counter"});
     public static final DBTable answersTable = new DBTable("answers", new String[]{"id",
@@ -34,7 +34,8 @@ public class DBHelper extends SQLiteOpenHelper {
             "problem_id", "time"});
     public static final DBTable gamesPointsTable = new DBTable("games_points", new String[]{"id",
             "points", "date"});
-    public static final DBTable stagesNumberTable = new DBTable("stages_number", new String[]{"number"});
+    public static final DBTable settingsTable = new DBTable("settings", new String[]{"id",
+            "name", "value"});
     private static DBHelper currentDBHelper;
 
     public DBHelper(@Nullable Context context) {
@@ -121,7 +122,7 @@ public class DBHelper extends SQLiteOpenHelper {
             values.put(answersTable.col[3], value);
             db.insert(answersTable.name, null, values);
         }
-        changeStagesNumberInDatabase(db, MainActivity.getStagesInLevel());
+        insertDefaultSettingsValues(db);
     }
 
     public ArrayList<String> getAnswers(int problemId) {
@@ -221,38 +222,61 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (oldVersion < 2) {
-            onUpgrade2(db);
+        if (oldVersion == 2) {
+            rollbackUpgrade2(db);
+        }
+        if (oldVersion < 3) {
+            onUpgrade3(db);
         }
     }
 
-    private void onUpgrade2(SQLiteDatabase db) {
-        String query = "CREATE TABLE stages_number ( number integer );";
+    private void onUpgrade3(SQLiteDatabase db) {
+        String query = "CREATE TABLE settings (id integer PRIMARY KEY, name text, value integer);";
         db.execSQL(query);
-        changeStagesNumberInDatabase(db, MainActivity.getStagesInLevel());
+        insertDefaultSettingsValues(db);
     }
 
-    public void changeStagesNumberInDatabase(int number) {
+    private void insertDefaultSettingsValues(SQLiteDatabase db) {
+        db.delete(settingsTable.name, null, null);
+        ContentValues values = new ContentValues();
+        values.put(settingsTable.col[1], Settings.STAGES_PER_LEVEL.toString());
+        values.put(settingsTable.col[2], 3);
+        db.insert(settingsTable.name, null, values);
+        values = new ContentValues();
+        values.put(settingsTable.col[1], Settings.FROM_NEWEST_GAMES_HISTORY.toString());
+        values.put(settingsTable.col[2], 1);
+        db.insert(settingsTable.name, null, values);
+        values = new ContentValues();
+        values.put(settingsTable.col[1], Settings.RETURN_ON_CLICK.toString());
+        values.put(settingsTable.col[2], 0);
+        db.insert(settingsTable.name, null, values);
+    }
+
+    private void rollbackUpgrade2(SQLiteDatabase db) {
+        String query = "DROP TABLE stages_number;";
+        db.execSQL(query);
+    }
+
+    public void updateSetting(Settings setting) {
         try (SQLiteDatabase db = getWritableDatabase()) {
-            changeStagesNumberInDatabase(db, number);
+            updateSetting(setting, setting.getIntValue(), db);
         }
     }
 
-    private void changeStagesNumberInDatabase(SQLiteDatabase db, int number) {
-        db.delete(stagesNumberTable.name, null, null);
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(stagesNumberTable.col[0], number);
-        db.insert(stagesNumberTable.name, null, contentValues);
+    private void updateSetting(Settings setting, int newValue, SQLiteDatabase db) {
+        String query = "UPDATE " + settingsTable.name + " SET " + settingsTable.col[2] + " = " +
+                newValue + " WHERE " + settingsTable.col[1] + " = '" + setting + "';";
+        db.execSQL(query);
     }
 
-    public int getStagesNumber() {
+    public int getSettingIntValue(Settings setting) {
         int value = -1;
-        try (SQLiteDatabase db = getReadableDatabase()) {
-            String query = "SELECT * FROM " + stagesNumberTable.name;
+        try (SQLiteDatabase db = getReadableDatabase()){
+            String query = "SELECT " + settingsTable.col[2] + " FROM " + settingsTable.name +
+                    " WHERE " + settingsTable.col[1] + " = '" + setting + "';";
             Cursor cursor = db.rawQuery(query, null);
-            if (cursor.moveToFirst()) {
+            if (cursor.moveToFirst())
                 value = cursor.getInt(0);
-            }
             cursor.close();
         }
         return value;
@@ -285,11 +309,20 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    public ArrayList<GameData> getGamesHistory() {
+    public GameData getNewestGameStats() {
+        return getGamesHistory(true).get(0);
+    }
+
+    public ArrayList<GameData> getGamesHistory(boolean fromNewest) {
         ArrayList<GameData> gamesHistoryArray = new ArrayList<>();
         try (SQLiteDatabase db = getReadableDatabase()) {
             ArrayList<Integer> gamesIds = new ArrayList<>();
-            String query = "SELECT " + gamesPointsTable.col[0] + " FROM " + gamesPointsTable.name;
+            String query = "SELECT " + gamesPointsTable.col[0] + " FROM " + gamesPointsTable.name +
+                    " ORDER BY " + gamesPointsTable.col[0];
+            if (fromNewest)
+                query += " DESC;";
+            else
+                query += " ASC;";
             Cursor cursor = db.rawQuery(query, null);
             if (cursor.moveToFirst()) {
                 Integer value = cursor.getInt(0);
