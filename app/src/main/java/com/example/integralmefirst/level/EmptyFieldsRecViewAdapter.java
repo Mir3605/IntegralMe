@@ -51,7 +51,7 @@ public class EmptyFieldsRecViewAdapter extends RecyclerView.Adapter<EmptyFieldsR
                 MathRadioButton button = (MathRadioButton) view;
                 int currentPosition = holder.getAdapterPosition();
                 if (!LevelActivity.emptyMathField.equals(fields.get(currentPosition)) &&
-                        Settings.isReturnOnClick()) {
+                        Settings.getReturnOnClick()) {
                     levelActivity.addToAnswers(fields.get(currentPosition));
                     fields.set(currentPosition, LevelActivity.emptyMathField);
                 }
@@ -61,8 +61,7 @@ public class EmptyFieldsRecViewAdapter extends RecyclerView.Adapter<EmptyFieldsR
                     button.setChecked(true);
                     notifyItemChanged(oldSelectedPosition);
                     notifyItemChanged(selectedPosition);
-                }
-                else {
+                } else {
                     notifyItemChanged(currentPosition);
                 }
             }

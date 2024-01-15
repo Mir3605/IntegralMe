@@ -2,6 +2,7 @@ package com.example.integralmefirst.level;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.integralmefirst.R;
 import com.example.integralmefirst.database.DBHelper;
 import com.example.integralmefirst.gameshistory.GameData;
+import com.example.integralmefirst.settings.Settings;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -118,7 +120,7 @@ public class LevelActivity extends AppCompatActivity {
                     points += (difficulty + 1) * 10 + seriesMultiplier * series;
                     series++;
                     timeList[currentStageNumber - 1] = System.currentTimeMillis() - startTime;
-                    if (currentStageNumber >= lastStageNumber) {
+                    if (isLastLevel()) {
                         finishLevel();
                     } else {
                         moveToNextStage();
@@ -129,6 +131,10 @@ public class LevelActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public boolean isLastLevel() {
+        return currentStageNumber >= lastStageNumber;
     }
 
     private void updateStage() {
@@ -143,9 +149,9 @@ public class LevelActivity extends AppCompatActivity {
         dialog.show(getSupportFragmentManager(), "LevelSummaryDialog");
         getSupportFragmentManager().executePendingTransactions();
         Dialog dialog1 = dialog.getDialog();
-        if (dialog1 != null){
+        if (dialog1 != null) {
             Window window = dialog1.getWindow();
-            if (window != null){
+            if (window != null) {
                 window.getDecorView().setOnTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -154,11 +160,9 @@ public class LevelActivity extends AppCompatActivity {
                     }
                 });
                 Log.i("LevelActivity", "Successfully overrode onTouch");
-            }
-            else
+            } else
                 Log.i("LevelActivity", "dialog.getDialog().getWindow() produced null");
-        }
-        else
+        } else
             Log.i("LevelActivity", "dialog.getDialog() produced null");
     }
 
@@ -171,7 +175,18 @@ public class LevelActivity extends AppCompatActivity {
         intent.putExtra("stageNum", currentStageNumber + 1);
         intent.putExtra("timeList", timeList);
         startActivity(intent);
+        if (Settings.getAnimationsDisplay())
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         finish();
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        if (!Settings.getAnimationsDisplay())
+            return;
+        if (isLastLevel())
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
     public String setSelectedEmptyField(String data) {

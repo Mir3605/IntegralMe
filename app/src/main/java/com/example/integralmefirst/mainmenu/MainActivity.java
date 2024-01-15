@@ -56,10 +56,14 @@ public class MainActivity extends AppCompatActivity {
     private void switchToGamesHistory() {
         Intent intent = new Intent(this, GamesHistoryActivity.class);
         startActivity(intent);
+        if (Settings.getAnimationsDisplay())
+            overridePendingTransition(R.anim.zoom_decreasing_enter, R.anim.zoom_decreasing_exit);
     }
 
     private void switchToSettings() {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
+        if (Settings.getAnimationsDisplay())
+            overridePendingTransition(R.anim.zoom_increasing_enter, R.anim.zoom_increasing_exit);
     }
 }

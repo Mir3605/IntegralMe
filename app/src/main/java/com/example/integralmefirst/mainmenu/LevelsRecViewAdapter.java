@@ -48,6 +48,8 @@ public class LevelsRecViewAdapter extends RecyclerView.Adapter<LevelsRecViewAdap
                         intent.putExtra("chosenProblems", problemIds);
                         intent.putExtra("timeList", new long[Settings.getStagesPerLevel()]);
                         mainActivity.startActivity(intent);
+                        if (Settings.getAnimationsDisplay())
+                            mainActivity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                     }
                 }
         );

@@ -25,7 +25,7 @@ import java.util.Collections;
 public class DBHelper extends SQLiteOpenHelper {
     private final Resources resources;
     private static final String dbName = "integrals.db";
-    private static final int dbVersion = 3;
+    private static final int dbVersion = 4;
     public static final DBTable problemsTable = new DBTable("problems", new String[]{"id",
             "value", "difficulty", "user_solves_counter"});
     public static final DBTable answersTable = new DBTable("answers", new String[]{"id",
@@ -228,12 +228,22 @@ public class DBHelper extends SQLiteOpenHelper {
         if (oldVersion < 3) {
             onUpgrade3(db);
         }
+        if (oldVersion < 4) {
+            onUpgrade4(db);
+        }
     }
 
     private void onUpgrade3(SQLiteDatabase db) {
         String query = "CREATE TABLE settings (id integer PRIMARY KEY, name text, value integer);";
         db.execSQL(query);
         insertDefaultSettingsValues(db);
+    }
+
+    private void onUpgrade4(SQLiteDatabase db) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(settingsTable.col[1], Settings.ANIMATIONS_DISPLAY.toString());
+        contentValues.put(settingsTable.col[2], 1);
+        db.insert(settingsTable.name, null, contentValues);
     }
 
     private void insertDefaultSettingsValues(SQLiteDatabase db) {
@@ -249,6 +259,10 @@ public class DBHelper extends SQLiteOpenHelper {
         values = new ContentValues();
         values.put(settingsTable.col[1], Settings.RETURN_ON_CLICK.toString());
         values.put(settingsTable.col[2], 0);
+        db.insert(settingsTable.name, null, values);
+        values = new ContentValues();
+        values.put(settingsTable.col[1], Settings.ANIMATIONS_DISPLAY.toString());
+        values.put(settingsTable.col[2], 1);
         db.insert(settingsTable.name, null, values);
     }
 
@@ -271,7 +285,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public int getSettingIntValue(Settings setting) {
         int value = -1;
-        try (SQLiteDatabase db = getReadableDatabase()){
+        try (SQLiteDatabase db = getReadableDatabase()) {
             String query = "SELECT " + settingsTable.col[2] + " FROM " + settingsTable.name +
                     " WHERE " + settingsTable.col[1] + " = '" + setting + "';";
             Cursor cursor = db.rawQuery(query, null);

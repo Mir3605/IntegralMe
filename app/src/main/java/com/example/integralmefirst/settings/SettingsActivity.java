@@ -46,13 +46,14 @@ public class SettingsActivity extends AppCompatActivity {
             public void onStartTrackingTouch(@NonNull Slider slider) {
 
             }
+
             @Override
             public void onStopTrackingTouch(@NonNull Slider slider) {
                 Settings.setStagesPerLevel((int) slider.getValue());
             }
         });
         SwitchCompat switchReturnOnClick = findViewById(R.id.MoveTextSwtich);
-        switchReturnOnClick.setChecked(Settings.isReturnOnClick());
+        switchReturnOnClick.setChecked(Settings.getReturnOnClick());
         switchReturnOnClick.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -68,10 +69,27 @@ public class SettingsActivity extends AppCompatActivity {
                 Settings.setFromNewestGamesHistory(isChecked);
             }
         });
+
+        SwitchCompat switchAnimations = findViewById(R.id.AnimationsDisplaySwitch);
+        switchAnimations.setChecked(Settings.getAnimationsDisplay());
+        switchAnimations.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Settings.setAnimationsDisplay(isChecked);
+            }
+        });
     }
 
     private void showAreYouSureDialog() {
         AreYouSureDialog dialog = new AreYouSureDialog(this);
         dialog.show(getSupportFragmentManager(), "AreYouSureDialog");
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        if (!Settings.getAnimationsDisplay())
+            return;
+        overridePendingTransition(R.anim.zoom_decreasing_enter, R.anim.zoom_decreasing_exit);
     }
 }

@@ -64,11 +64,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/SetIntegralsNumber"
+                android:contentDescription="@string/set_integrals_number_per_level"
                 android:stepSize="1"
                 android:valueFrom="1"
                 android:valueTo="6"
-                app:labelBehavior="visible"
-                android:contentDescription="@string/set_integrals_number_per_level" />
+                app:labelBehavior="visible" />
         </RelativeLayout>
 
     </androidx.cardview.widget.CardView>
@@ -119,6 +119,24 @@
                 android:layout_below="@+id/MoveTextTextView"
                 android:layout_toEndOf="@+id/OrderGamesSwitch"
                 android:text="@string/order_games_history_string"
+                android:textAlignment="center" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/AnimationsDisplaySwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/OrderGamesTextView"
+                android:layout_margin="5dp" />
+
+            <TextView
+                android:id="@+id/AnimationsDisplayTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/OrderGamesTextView"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="13dp"
+                android:layout_toEndOf="@+id/AnimationsDisplaySwitch"
+                android:text="@string/animations_display"
                 android:textAlignment="center" />
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
