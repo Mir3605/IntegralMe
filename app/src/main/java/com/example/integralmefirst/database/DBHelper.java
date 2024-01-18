@@ -25,7 +25,7 @@ import java.util.Collections;
 public class DBHelper extends SQLiteOpenHelper {
     private final Resources resources;
     private static final String dbName = "integrals.db";
-    private static final int dbVersion = 4;
+    private static final int dbVersion = 3;
     public static final DBTable problemsTable = new DBTable("problems", new String[]{"id",
             "value", "difficulty", "user_solves_counter"});
     public static final DBTable answersTable = new DBTable("answers", new String[]{"id",
@@ -228,9 +228,6 @@ public class DBHelper extends SQLiteOpenHelper {
         if (oldVersion < 3) {
             onUpgrade3(db);
         }
-        if (oldVersion < 4) {
-            onUpgrade4(db);
-        }
     }
 
     private void onUpgrade3(SQLiteDatabase db) {
@@ -239,31 +236,12 @@ public class DBHelper extends SQLiteOpenHelper {
         insertDefaultSettingsValues(db);
     }
 
-    private void onUpgrade4(SQLiteDatabase db) {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(settingsTable.col[1], Settings.ANIMATIONS_DISPLAY.toString());
-        contentValues.put(settingsTable.col[2], 1);
-        db.insert(settingsTable.name, null, contentValues);
-    }
-
     private void insertDefaultSettingsValues(SQLiteDatabase db) {
         db.delete(settingsTable.name, null, null);
-        ContentValues values = new ContentValues();
-        values.put(settingsTable.col[1], Settings.STAGES_PER_LEVEL.toString());
-        values.put(settingsTable.col[2], 3);
-        db.insert(settingsTable.name, null, values);
-        values = new ContentValues();
-        values.put(settingsTable.col[1], Settings.FROM_NEWEST_GAMES_HISTORY.toString());
-        values.put(settingsTable.col[2], 1);
-        db.insert(settingsTable.name, null, values);
-        values = new ContentValues();
-        values.put(settingsTable.col[1], Settings.RETURN_ON_CLICK.toString());
-        values.put(settingsTable.col[2], 0);
-        db.insert(settingsTable.name, null, values);
-        values = new ContentValues();
-        values.put(settingsTable.col[1], Settings.ANIMATIONS_DISPLAY.toString());
-        values.put(settingsTable.col[2], 1);
-        db.insert(settingsTable.name, null, values);
+        updateSetting(db, Settings.STAGES_PER_LEVEL, 3);
+        updateSetting(db, Settings.FROM_NEWEST_GAMES_HISTORY, 1);
+        updateSetting(db, Settings.RETURN_ON_CLICK, 0);
+        updateSetting(db, Settings.ANIMATIONS_DISPLAY, 1);
     }
 
     private void rollbackUpgrade2(SQLiteDatabase db) {
@@ -273,14 +251,18 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public void updateSetting(Settings setting) {
         try (SQLiteDatabase db = getWritableDatabase()) {
-            updateSetting(setting, setting.getIntValue(), db);
+            updateSetting(db, setting, setting.getIntValue());
         }
     }
 
-    private void updateSetting(Settings setting, int newValue, SQLiteDatabase db) {
-        String query = "UPDATE " + settingsTable.name + " SET " + settingsTable.col[2] + " = " +
-                newValue + " WHERE " + settingsTable.col[1] + " = '" + setting + "';";
-        db.execSQL(query);
+    private void updateSetting(SQLiteDatabase db, Settings setting, int newValue) {
+        if (newValue < 0)
+            throw new RuntimeException("Settings cannot have negative values");
+        db.delete(settingsTable.name, settingsTable.col[1] + " = ?", new String[]{setting.toString()});
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(settingsTable.col[1], setting.toString());
+        contentValues.put(settingsTable.col[2], newValue);
+        db.insert(settingsTable.name, null, contentValues);
     }
 
     public int getSettingIntValue(Settings setting) {
@@ -292,6 +274,10 @@ public class DBHelper extends SQLiteOpenHelper {
             if (cursor.moveToFirst())
                 value = cursor.getInt(0);
             cursor.close();
+        }
+        if (value < 0) {
+            updateSetting(setting);
+            return getSettingIntValue(setting);
         }
         return value;
     }
