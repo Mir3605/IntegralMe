@@ -26,8 +26,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         DBHelper helper = new DBHelper(this); // DBHelper should be initialized at the beginning of the program
         Settings.readSettingsFromDB();
-        RecyclerView chooseLvlRecView = findViewById(R.id.ChooseLvlRecView);
 
+        RecyclerView chooseLvlRecView = findViewById(R.id.ChooseLvlRecView);
         ArrayList<Lvl> lvlsArray = new ArrayList<>();
         for (int i = 0; i < difficultyLevelsNumber; i++) {
             lvlsArray.add(new Lvl(i));
@@ -51,6 +51,11 @@ public class MainActivity extends AppCompatActivity {
                 switchToSettings();
             }
         });
+
+        if (Settings.getDisplayTutorial()) {
+            // TODO Move to tutorial section
+            // something.bringToFront();
+        }
     }
 
     private void switchToGamesHistory() {

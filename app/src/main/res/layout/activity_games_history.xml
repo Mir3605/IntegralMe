@@ -6,6 +6,12 @@
     android:padding="10dp"
     tools:context=".gameshistory.GamesHistoryActivity">
 
+    <RelativeLayout
+        android:id="@+id/TutorialCoverGamesHistory"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/dark1_transparent" />
+
     <TextView
         android:id="@+id/GamesHistoryTitle"
         android:layout_width="wrap_content"
@@ -19,8 +25,8 @@
         android:id="@+id/GamesHistoryRecyclerView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/GamesHistoryTitle"
         android:layout_above="@+id/SwitchToProblems"
+        android:layout_below="@+id/GamesHistoryTitle"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="5dp"
         tools:listitem="@layout/game_history_card" />
@@ -30,8 +36,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_margin="10dp"
         android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"
         android:text="@string/switch_view_to_problems_statistics" />
 
 </RelativeLayout>

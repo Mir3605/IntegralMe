@@ -6,17 +6,28 @@ public enum Settings {
     STAGES_PER_LEVEL,
     RETURN_ON_CLICK,
     FROM_NEWEST_GAMES_HISTORY,
-    ANIMATIONS_DISPLAY;
+    ANIMATIONS_DISPLAY,
+    DISPLAY_TUTORIAL;
     private static int stagesPerLevel = 3;
     private static boolean returnOnClick = false;
     private static boolean fromNewestGamesHistory = true;
     private static boolean animationsDisplay = true;
+    private static boolean displayTutorial = true;
+
+    public static boolean getDisplayTutorial() {
+        return displayTutorial;
+    }
+
+    static void setDisplayTutorial(boolean displayTutorial) {
+        Settings.displayTutorial = displayTutorial;
+        DBHelper.getCurrentDBHelper().updateSetting(DISPLAY_TUTORIAL);
+    }
 
     public static boolean getAnimationsDisplay() {
         return animationsDisplay;
     }
 
-    public static void setAnimationsDisplay(boolean animationsDisplay) {
+    static void setAnimationsDisplay(boolean animationsDisplay) {
         Settings.animationsDisplay = animationsDisplay;
         DBHelper.getCurrentDBHelper().updateSetting(ANIMATIONS_DISPLAY);
     }
@@ -63,21 +74,24 @@ public enum Settings {
             case STAGES_PER_LEVEL:
                 return stagesPerLevel;
             case RETURN_ON_CLICK: {
-                if (returnOnClick)
-                    return 1;
-                return 0;
+                return bool2Int(returnOnClick);
             }
             case FROM_NEWEST_GAMES_HISTORY: {
-                if (fromNewestGamesHistory)
-                    return 1;
-                return 0;
+                return bool2Int(fromNewestGamesHistory);
             }
             case ANIMATIONS_DISPLAY: {
-                if (animationsDisplay)
-                    return 1;
-                return 0;
+                return bool2Int(animationsDisplay);
+            }
+            case DISPLAY_TUTORIAL: {
+                return bool2Int(displayTutorial);
             }
         }
         throw new RuntimeException("Invalid setting");
+    }
+
+    public static int bool2Int(boolean bool) {
+        if (bool)
+            return 1;
+        return 0;
     }
 }
