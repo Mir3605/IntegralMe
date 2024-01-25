@@ -32,4 +32,9 @@
     <string name="move_chosen_answer_string">Move chosen answer back to answers pool on click</string>
     <string name="order_games_history_string">Order games history from newest to oldest</string>
     <string name="animations_display">Animations display</string>
+    <string name="tutorial">Tutorial</string>
+    <string name="tutorial_description_0">This short tutorial will help you\nunderstand the game easily.</string>
+    <string name="level">Level</string>
+    <string name="levels">Levels</string>
+    <string name="tutorial_description_1">This is the levels section.\nThere are 3 difficulty levels:\nZero - integrals to remember\nFirst - a little bit more advanced ones\nSecond - advanced integrals</string>
 </resources>

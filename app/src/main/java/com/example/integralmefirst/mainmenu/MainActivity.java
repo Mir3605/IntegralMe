@@ -26,6 +26,7 @@ import smartdevelop.ir.eram.showcaseviewlib.listener.GuideListener;
 
 public class MainActivity extends AppCompatActivity {
     public static final int difficultyLevelsNumber = 3;
+    private RecyclerView levelsRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,15 +35,15 @@ public class MainActivity extends AppCompatActivity {
         DBHelper helper = new DBHelper(this); // DBHelper should be initialized at the beginning of the program
         Settings.readSettingsFromDB();
 
-        RecyclerView chooseLvlRecView = findViewById(R.id.ChooseLvlRecView);
+        levelsRecyclerView = findViewById(R.id.ChooseLvlRecyclerView);
         ArrayList<Lvl> lvlsArray = new ArrayList<>();
         for (int i = 0; i < difficultyLevelsNumber; i++) {
-            lvlsArray.add(new Lvl(i));
+            lvlsArray.add(new Lvl(this, i));
         }
         LevelsRecViewAdapter adapter = new LevelsRecViewAdapter(this);
         adapter.setLvls(lvlsArray);
-        chooseLvlRecView.setAdapter(adapter);
-        chooseLvlRecView.setLayoutManager(new LinearLayoutManager(this));
+        levelsRecyclerView.setAdapter(adapter);
+        levelsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         Button gamesHistoryButton = findViewById(R.id.GamesHistoryButton);
         gamesHistoryButton.setOnClickListener(new View.OnClickListener() {
@@ -60,8 +61,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         if (Settings.getDisplayTutorial()) {
-            // TODO Move to tutorial section
-            // something.bringToFront();
             displayTutorial(0);
         }
     }
@@ -90,19 +89,51 @@ public class MainActivity extends AppCompatActivity {
 
         switch (step) {
             case 0: {
-                GuideView guideView = new GuideView.Builder(this)
+                new GuideView.Builder(this)
                         .setPointerType(PointerType.none)
-                        .setTitle("Tutorial")
-                        .setContentText("This short tutorial will help you\nunderstand the game easily.")
+                        .setTitle(getString(R.string.tutorial))
+                        .setContentText(getString(R.string.tutorial_description_0))
                         .setTitleTextColor(Color.WHITE)
                         .setContentTextColor(Color.WHITE)
                         .setDismissType(DismissType.anywhere)
                         .setGuideListener(nextTutorialStep)
                         .setGravity(Gravity.center)
                         .setTargetView(findViewById(R.id.WelcomeText))
-                        .build();
-                guideView.setBackgroundColor(Color.TRANSPARENT);
-                guideView.show();
+                        .build()
+                        .show();
+                break;
+            }
+            case 1: {
+                new GuideView.Builder(this)
+                        .setTitle(getString(R.string.levels))
+                        .setContentText(getString(R.string.tutorial_description_1))
+                        .setTitleTextColor(Color.WHITE)
+                        .setContentTextColor(Color.WHITE)
+                        .setDismissType(DismissType.anywhere)
+                        .setGuideListener(nextTutorialStep)
+                        .setGravity(Gravity.center)
+                        .setTargetView(findViewById(R.id.ChooseLvlRecyclerView))
+                        .build()
+                        .show();
+                break;
+            }
+            case 2: {
+                new GuideView.Builder(this)
+                        .setTitle(getString(R.string.level))
+                        .setContentText("Choose level 0 to begin with")
+                        .setTitleTextColor(Color.WHITE)
+                        .setContentTextColor(Color.WHITE)
+                        .setDismissType(DismissType.targetView)
+                        .setGuideListener(nextTutorialStep)
+                        .setTargetView(levelsRecyclerView.getChildAt(0))
+                        .build()
+                        .show();
+                break;
+            }
+            case 3: {
+                Button button = (Button) levelsRecyclerView.getChildAt(0).findViewById(R.id.LvlButton);
+                button.performClick();
+                break;
             }
         }
     }
