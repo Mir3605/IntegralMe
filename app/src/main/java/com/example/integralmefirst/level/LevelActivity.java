@@ -2,7 +2,7 @@ package com.example.integralmefirst.level;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.os.Build;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -25,6 +25,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import katex.hourglass.in.mathlib.MathView;
+import smartdevelop.ir.eram.showcaseviewlib.GuideView;
+import smartdevelop.ir.eram.showcaseviewlib.config.DismissType;
+import smartdevelop.ir.eram.showcaseviewlib.listener.GuideListener;
 
 public class LevelActivity extends AppCompatActivity {
     public static final int seriesMultiplier = 20;
@@ -40,6 +43,9 @@ public class LevelActivity extends AppCompatActivity {
     private ArrayList<String> correctAnswers;
     private EmptyFieldsRecViewAdapter emptyFieldsRecViewAdapter;
     private AnswersRecViewAdapter answersRecViewAdapter;
+    private RecyclerView emptyFieldsRecyclerView;
+    private RecyclerView answersRecyclerView;
+    private Button checkButton;
     private TextView stage;
     private DBHelper helper;
 
@@ -80,6 +86,15 @@ public class LevelActivity extends AppCompatActivity {
         setCheckButtonFunctionality();
 
         startTime = System.currentTimeMillis();
+
+        if (Settings.getDisplayTutorial()) {
+            if (currentStageNumber == 1)
+                displayTutorial(3);
+            else if (currentStageNumber == 2)
+                displayTutorial(11);
+            else
+                displayTutorial(16);
+        }
     }
 
     private void initializeEmptyFieldsRecView(int problemId) {
@@ -91,9 +106,9 @@ public class LevelActivity extends AppCompatActivity {
         }
         emptyFieldsRecViewAdapter = new EmptyFieldsRecViewAdapter(this);
         emptyFieldsRecViewAdapter.setEmptyFields(emptyFieldsValues);
-        RecyclerView emptyFieldsRecView = findViewById(R.id.EmptyFieldsRecyclerView);
-        emptyFieldsRecView.setAdapter(emptyFieldsRecViewAdapter);
-        emptyFieldsRecView.setLayoutManager(new LinearLayoutManager(this));
+        emptyFieldsRecyclerView = findViewById(R.id.EmptyFieldsRecyclerView);
+        emptyFieldsRecyclerView.setAdapter(emptyFieldsRecViewAdapter);
+        emptyFieldsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     private void initializeAnswersRecView(int problemId) {
@@ -102,16 +117,17 @@ public class LevelActivity extends AppCompatActivity {
             answersValues.addAll(helper.getRandomAnswersExcludingCorrect(difficulty, 4, problemId));
         else
             answersValues.addAll(helper.getRandomAnswersExcludingCorrect(difficulty, 2, problemId));
-        Collections.shuffle(answersValues);
+        if (!Settings.getDisplayTutorial())   // in the tutorial the correct answer should always be on top
+            Collections.shuffle(answersValues);
         answersRecViewAdapter = new AnswersRecViewAdapter(this);
         answersRecViewAdapter.setAnswers(answersValues);
-        RecyclerView answersRecView = findViewById(R.id.AnswersRecyclerView);
-        answersRecView.setAdapter(answersRecViewAdapter);
-        answersRecView.setLayoutManager(new LinearLayoutManager(this));
+        answersRecyclerView = findViewById(R.id.AnswersRecyclerView);
+        answersRecyclerView.setAdapter(answersRecViewAdapter);
+        answersRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     private void setCheckButtonFunctionality() {
-        Button checkButton = findViewById(R.id.checkButton);
+        checkButton = findViewById(R.id.checkButton);
         checkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -164,6 +180,24 @@ public class LevelActivity extends AppCompatActivity {
                 Log.i("LevelActivity", "dialog.getDialog().getWindow() produced null");
         } else
             Log.i("LevelActivity", "dialog.getDialog() produced null");
+        if (Settings.getDisplayTutorial()) {
+            GuideView guideView = new GuideView.Builder(this)
+                    .setTargetView(dialog1.findViewById(R.id.LevelSummaryRelativeLayout))
+                    .setTitleTextColor(Color.WHITE)
+                    .setContentTextColor(Color.WHITE)
+                    .setTitle("Level summary")
+                    .setContentText("On the end of each level\na short summary is displayed.\nYou can view it again\nin the games history")
+                    .setDismissType(DismissType.anywhere)
+                    .setGuideListener(new GuideListener() {
+                        @Override
+                        public void onDismiss(View view) {
+                            finish();
+                        }
+                    })
+                    .build();
+            guideView.setBackgroundColor(Color.TRANSPARENT);
+            guideView.show();
+        }
     }
 
     private void moveToNextStage() {
@@ -211,5 +245,151 @@ public class LevelActivity extends AppCompatActivity {
 
     void addToAnswers(String answer) {
         answersRecViewAdapter.addAnswer(answer);
+    }
+
+    private void displayTutorial(int step) {
+        GuideView.Builder builder = new GuideView.Builder(this)
+                .setTitleTextColor(Color.WHITE)
+                .setContentTextColor(Color.WHITE)
+                .setGuideListener(new GuideListener() {
+                    @Override
+                    public void onDismiss(View view) {
+                        displayTutorial(step + 1);
+                    }
+                });
+
+        switch (step) {
+            case 3: {
+                builder.setTitle(getString(R.string.stage_number))
+                        .setContentText(getString(R.string.tutorial_description_3))
+                        .setDismissType(DismissType.anywhere)
+                        .setTargetView(stage);
+                break;
+            }
+            case 4: {
+                builder.setTitle(getString(R.string.points))
+                        .setContentText(getString(R.string.tutorial_description_4))
+                        .setDismissType(DismissType.anywhere)
+                        .setTargetView(findViewById(R.id.points));
+                break;
+            }
+            case 5: {
+                builder.setTitle(getString(R.string.question))
+                        .setContentText(getString(R.string.tutorial_description_5))
+                        .setDismissType(DismissType.anywhere)
+                        .setTargetView(findViewById(R.id.Question));
+                break;
+            }
+            case 6: {
+                builder.setTitle(getString(R.string.empty_fields))
+                        .setContentText(getString(R.string.tutorial_description_6))
+                        .setDismissType(DismissType.anywhere)
+                        .setTargetView(findViewById(R.id.EmptyFieldsRecyclerView));
+                break;
+            }
+            case 7: {
+                builder.setTitle(getString(R.string.answers))
+                        .setContentText(getString(R.string.tutorial_description_7))
+                        .setDismissType(DismissType.anywhere)
+                        .setTargetView(findViewById(R.id.AnswersRecyclerView));
+                break;
+            }
+            case 8: {
+                builder.setTitle(getString(R.string.answer_selection))
+                        .setContentText(getString(R.string.tutorial_description_8))
+                        .setDismissType(DismissType.targetView)
+                        .setTargetView(answersRecyclerView.getChildAt(0));
+                break;
+            }
+            case 9: {
+                builder.setTitle(getString(R.string.answer_inserted))
+                        .setContentText(getString(R.string.tutorial_description_9))
+                        .setDismissType(DismissType.anywhere)
+                        .setTargetView(emptyFieldsRecyclerView.getChildAt(0));
+                break;
+            }
+            case 10: {
+                builder.setTitle(getString(R.string.continue_string))
+                        .setContentText(getString(R.string.tutorial_description_10))
+                        .setDismissType(DismissType.targetView)
+                        .setTargetView(checkButton);
+                break;
+            }
+            case 11: {
+                builder.setTitle(getString(R.string.points_update))
+                        .setContentText(getString(R.string.tutorial_description_11))
+                        .setDismissType(DismissType.anywhere)
+                        .setTargetView(findViewById(R.id.points));
+                break;
+            }
+            case 12: {
+                builder.setTitle(getString(R.string.miss_click))
+                        .setContentText(getString(R.string.tutorial_description_12))
+                        .setDismissType(DismissType.targetView)
+                        .setTargetView(answersRecyclerView.getChildAt(1));
+                break;
+            }
+            case 13: {
+                builder.setTitle(getString(R.string.miss_click))
+                        .setContentText(getString(R.string.tutorial_description_13))
+                        .setDismissType(DismissType.targetView)
+                        .setTargetView(answersRecyclerView.getChildAt(0));
+                break;
+            }
+            case 14: {
+                builder.setTitle(getString(R.string.miss_click))
+                        .setContentText(getString(R.string.tutorial_description_14))
+                        .setDismissType(DismissType.anywhere)
+                        .setTargetView(answersRecyclerView);
+                break;
+            }
+            case 15: {
+                builder.setTitle(getString(R.string.continue_string))
+                        .setContentText(getString(R.string.tutorial_description_15))
+                        .setDismissType(DismissType.targetView)
+                        .setTargetView(checkButton);
+                break;
+            }
+            case 16: {
+                builder.setTitle(getString(R.string.last_stage))
+                        .setContentText(getString(R.string.tutorial_description_16))
+                        .setDismissType(DismissType.anywhere)
+                        .setTargetView(stage);
+                break;
+            }
+            case 17: {
+                builder.setTitle(getString(R.string.wrong_check))
+                        .setContentText(getString(R.string.tutorial_description_17))
+                        .setDismissType(DismissType.targetView)
+                        .setTargetView(answersRecyclerView.getChildAt(1));
+                break;
+            }
+            case 18: {
+                builder.setTitle(getString(R.string.wrong_check))
+                        .setContentText(getString(R.string.tutorial_description_18))
+                        .setDismissType(DismissType.targetView)
+                        .setTargetView(checkButton);
+                break;
+            }
+            case 19: {
+                builder.setTitle(getString(R.string.wrong_check))
+                        .setContentText(getString(R.string.tutorial_description_19))
+                        .setDismissType(DismissType.targetView)
+                        .setTargetView(answersRecyclerView.getChildAt(0));
+                break;
+            }
+            case 20: {
+                builder.setTitle(getString(R.string.finish))
+                        .setContentText(getString(R.string.tutorial_description_20))
+                        .setDismissType(DismissType.targetView)
+                        .setTargetView(checkButton);
+                break;
+            }
+            default:
+                return;
+        }
+        GuideView guideView = builder.build();
+        guideView.setBackgroundColor(0x11000000);
+        guideView.show();
     }
 }

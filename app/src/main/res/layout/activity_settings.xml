@@ -40,12 +40,21 @@
         android:layout_margin="@dimen/Margin_between_buttons_main_activity"
         android:text="@string/remove_data" />
 
+    <Button
+        android:id="@+id/DisplayTutorialButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/RemoveDataButton"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="@dimen/Margin_between_buttons_main_activity"
+        android:text="@string/display_tutorial" />
+
 
     <androidx.cardview.widget.CardView
         android:id="@+id/SetIntegralsNumberCard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/RemoveDataButton"
+        android:layout_below="@id/DisplayTutorialButton"
         android:layout_centerHorizontal="true"
         android:layout_margin="8dp"
         android:padding="4dp"

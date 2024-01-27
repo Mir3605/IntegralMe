@@ -18,7 +18,7 @@ public enum Settings {
         return displayTutorial;
     }
 
-    static void setDisplayTutorial(boolean displayTutorial) {
+    public static void setDisplayTutorial(boolean displayTutorial) {
         Settings.displayTutorial = displayTutorial;
         DBHelper.getCurrentDBHelper().updateSetting(DISPLAY_TUTORIAL);
     }
@@ -67,6 +67,7 @@ public enum Settings {
         returnOnClick = helper.getSettingIntValue(RETURN_ON_CLICK) == 1;
         fromNewestGamesHistory = helper.getSettingIntValue(FROM_NEWEST_GAMES_HISTORY) == 1;
         animationsDisplay = helper.getSettingIntValue(ANIMATIONS_DISPLAY) == 1;
+        displayTutorial = helper.getSettingIntValue(DISPLAY_TUTORIAL) == 1;
     }
 
     public int getIntValue() {

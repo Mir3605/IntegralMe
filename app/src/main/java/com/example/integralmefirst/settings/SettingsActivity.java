@@ -39,6 +39,15 @@ public class SettingsActivity extends AppCompatActivity {
                 showAreYouSureDialog();
             }
         });
+
+        Button displayTutorialButton = findViewById(R.id.DisplayTutorialButton);
+        displayTutorialButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Settings.setDisplayTutorial(true);
+                finish();
+            }
+        });
         Slider slider = findViewById(R.id.SetIntegralsNumberBar);
         slider.setValue(Settings.getStagesPerLevel());
         slider.addOnSliderTouchListener(new Slider.OnSliderTouchListener() {

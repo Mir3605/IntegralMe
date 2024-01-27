@@ -387,4 +387,23 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         return problemData;
     }
+
+    public ArrayList<Integer> getTutorialProblemsIds() {
+        ArrayList<Integer> problemsIds = new ArrayList<>();
+        try (SQLiteDatabase db = getReadableDatabase()) {
+            String queryString = "SELECT " + problemsTable.col[0] + " FROM " + problemsTable.name +
+                    " WHERE " + problemsTable.col[2] + " = " + 0 + " LIMIT 3;";
+            Cursor cursor = db.rawQuery(queryString, null);
+            if (cursor.moveToFirst()) {
+                Integer value = cursor.getInt(0);
+                problemsIds.add(value);
+            }
+            while (cursor.moveToNext()) {
+                Integer value = cursor.getInt(0);
+                problemsIds.add(value);
+            }
+            cursor.close();
+        }
+        return problemsIds;
+    }
 }
