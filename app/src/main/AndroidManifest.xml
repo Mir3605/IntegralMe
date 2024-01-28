@@ -12,26 +12,26 @@
         android:theme="@style/Theme.IntegralMeFirst"
         tools:targetApi="34">
         <activity
-            android:name=".problemshistory.ProblemsHistoryActivity"
+            android:name="integral.me.problemshistory.ProblemsHistoryActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".settings.SettingsActivity"
+            android:name="integral.me.settings.SettingsActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".gameshistory.GamesHistoryActivity"
+            android:name="integral.me.gameshistory.GamesHistoryActivity"
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.IntegralMeFirst" />
         <activity
-            android:name=".level.LevelActivity"
+            android:name="integral.me.level.LevelActivity"
             android:exported="false"
             android:label="@string/title_activity_level"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.IntegralMeFirst" />
         <activity
-            android:name=".mainmenu.MainActivity"
+            android:name="integral.me.mainmenu.MainActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
