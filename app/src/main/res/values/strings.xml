@@ -72,4 +72,5 @@
     <string name="congratulations">Congratulations!</string>
     <string name="tutorial_description_21">You have finished the tutorial.\nNow you are ready to play.\nIf you need this tutorial once again,\nit will be available in the settings section</string>
     <string name="display_tutorial">Display tutorial</string>
+    <string name="quit_level">Are you sure you want to quit?\nAll progress in the current level will be lost.</string>
 </resources>

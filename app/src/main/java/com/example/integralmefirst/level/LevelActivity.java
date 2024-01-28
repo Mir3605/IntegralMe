@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -95,6 +96,15 @@ public class LevelActivity extends AppCompatActivity {
             else
                 displayTutorial(16);
         }
+
+        OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                QuitLevelDialog quitLevelDialog = new QuitLevelDialog();
+                quitLevelDialog.show(getSupportFragmentManager(), "QUIT_DIALOG");
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(onBackPressedCallback);
     }
 
     private void initializeEmptyFieldsRecView(int problemId) {
