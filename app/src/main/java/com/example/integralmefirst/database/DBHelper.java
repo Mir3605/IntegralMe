@@ -238,18 +238,10 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private void insertDefaultSettingsValues(SQLiteDatabase db) {
         db.delete(settingsTable.name, null, null);
-        ContentValues values = new ContentValues();
-        values.put(settingsTable.col[1], Settings.STAGES_PER_LEVEL.toString());
-        values.put(settingsTable.col[2], 3);
-        db.insert(settingsTable.name, null, values);
-        values = new ContentValues();
-        values.put(settingsTable.col[1], Settings.FROM_NEWEST_GAMES_HISTORY.toString());
-        values.put(settingsTable.col[2], 1);
-        db.insert(settingsTable.name, null, values);
-        values = new ContentValues();
-        values.put(settingsTable.col[1], Settings.RETURN_ON_CLICK.toString());
-        values.put(settingsTable.col[2], 0);
-        db.insert(settingsTable.name, null, values);
+        updateSetting(db, Settings.STAGES_PER_LEVEL, 3);
+        updateSetting(db, Settings.FROM_NEWEST_GAMES_HISTORY, 1);
+        updateSetting(db, Settings.RETURN_ON_CLICK, 0);
+        updateSetting(db, Settings.ANIMATIONS_DISPLAY, 1);
     }
 
     private void rollbackUpgrade2(SQLiteDatabase db) {
@@ -259,25 +251,33 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public void updateSetting(Settings setting) {
         try (SQLiteDatabase db = getWritableDatabase()) {
-            updateSetting(setting, setting.getIntValue(), db);
+            updateSetting(db, setting, setting.getIntValue());
         }
     }
 
-    private void updateSetting(Settings setting, int newValue, SQLiteDatabase db) {
-        String query = "UPDATE " + settingsTable.name + " SET " + settingsTable.col[2] + " = " +
-                newValue + " WHERE " + settingsTable.col[1] + " = '" + setting + "';";
-        db.execSQL(query);
+    private void updateSetting(SQLiteDatabase db, Settings setting, int newValue) {
+        if (newValue < 0)
+            throw new RuntimeException("Settings cannot have negative values");
+        db.delete(settingsTable.name, settingsTable.col[1] + " = ?", new String[]{setting.toString()});
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(settingsTable.col[1], setting.toString());
+        contentValues.put(settingsTable.col[2], newValue);
+        db.insert(settingsTable.name, null, contentValues);
     }
 
     public int getSettingIntValue(Settings setting) {
         int value = -1;
-        try (SQLiteDatabase db = getReadableDatabase()){
+        try (SQLiteDatabase db = getReadableDatabase()) {
             String query = "SELECT " + settingsTable.col[2] + " FROM " + settingsTable.name +
                     " WHERE " + settingsTable.col[1] + " = '" + setting + "';";
             Cursor cursor = db.rawQuery(query, null);
             if (cursor.moveToFirst())
                 value = cursor.getInt(0);
             cursor.close();
+        }
+        if (value < 0) {
+            updateSetting(setting);
+            return getSettingIntValue(setting);
         }
         return value;
     }
@@ -386,5 +386,24 @@ public class DBHelper extends SQLiteOpenHelper {
             cursor.close();
         }
         return problemData;
+    }
+
+    public ArrayList<Integer> getTutorialProblemsIds() {
+        ArrayList<Integer> problemsIds = new ArrayList<>();
+        try (SQLiteDatabase db = getReadableDatabase()) {
+            String queryString = "SELECT " + problemsTable.col[0] + " FROM " + problemsTable.name +
+                    " WHERE " + problemsTable.col[2] + " = " + 0 + " LIMIT 3;";
+            Cursor cursor = db.rawQuery(queryString, null);
+            if (cursor.moveToFirst()) {
+                Integer value = cursor.getInt(0);
+                problemsIds.add(value);
+            }
+            while (cursor.moveToNext()) {
+                Integer value = cursor.getInt(0);
+                problemsIds.add(value);
+            }
+            cursor.close();
+        }
+        return problemsIds;
     }
 }

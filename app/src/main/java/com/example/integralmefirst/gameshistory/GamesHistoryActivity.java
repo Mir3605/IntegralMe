@@ -17,6 +17,8 @@ import com.example.integralmefirst.settings.Settings;
 import java.util.ArrayList;
 
 public class GamesHistoryActivity extends AppCompatActivity {
+    private boolean movingToMainActivity = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,10 +36,20 @@ public class GamesHistoryActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(GamesHistoryActivity.this, ProblemsHistoryActivity.class);
                 startActivity(intent);
+                movingToMainActivity = false;
                 finish();
             }
         });
+    }
 
-
+    @Override
+    public void finish() {
+        super.finish();
+        if (!Settings.getAnimationsDisplay())
+            return;
+        if (movingToMainActivity)
+            overridePendingTransition(R.anim.zoom_increasing_enter, R.anim.zoom_increasing_exit);
+        else
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 }

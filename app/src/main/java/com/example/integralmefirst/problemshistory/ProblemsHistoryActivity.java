@@ -12,10 +12,12 @@ import android.widget.Button;
 import com.example.integralmefirst.R;
 import com.example.integralmefirst.database.DBHelper;
 import com.example.integralmefirst.gameshistory.GamesHistoryActivity;
+import com.example.integralmefirst.settings.Settings;
 
 import java.util.ArrayList;
 
 public class ProblemsHistoryActivity extends AppCompatActivity {
+    private boolean movingToMainActivity = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,10 +36,22 @@ public class ProblemsHistoryActivity extends AppCompatActivity {
         switchToGamesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                movingToMainActivity = false;
                 Intent intent = new Intent(ProblemsHistoryActivity.this, GamesHistoryActivity.class);
                 startActivity(intent);
                 finish();
             }
         });
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        if (!Settings.getAnimationsDisplay())
+            return;
+        if (movingToMainActivity)
+            overridePendingTransition(R.anim.zoom_increasing_enter, R.anim.zoom_increasing_exit);
+        else
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 }
