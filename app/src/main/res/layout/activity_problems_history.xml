@@ -6,12 +6,6 @@
     android:padding="10dp"
     tools:context=".problemshistory.ProblemsHistoryActivity">
 
-    <RelativeLayout
-        android:id="@+id/TutorialCoverProblemsHistory"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/dark1_transparent" />
-
     <TextView
         android:id="@+id/GamesHistoryTitle"
         android:layout_width="wrap_content"

@@ -6,12 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".mainmenu.MainActivity">
 
-    <RelativeLayout
-        android:id="@+id/TutorialCoverMainMenu"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/dark1_transparent" />
-
     <TextView
         android:id="@+id/WelcomeText"
         android:layout_width="wrap_content"
