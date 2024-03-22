@@ -1,9 +1,9 @@
 # IntegralMe
-This project is an application designed to teach indefinite integrals. This issue is very important for students, who are on their way to become engineers one day. The app was designed to be minimalistic and simple to use in order to avoid distractions.
+This project is an application designed to teach indefinite integrals. This issue is crucial for students, who are on their way to become engineers one day. The app was designed to be minimalistic and simple to use in order to avoid distractions.
 
 ## Instalation
 
-There are two ways to install the app. The first is to install Android Studio and open the app with it. The second (easier one) is to download the .apk file.
+There are three ways to install the app. The first is to install Android Studio and open the app with it. The second (easier one) is to download the .apk file. The third one is the easiest - you can download it from the Google Play Store.
 
 ### With Android Studio
 Download Android Studio and use the play button, when connected to the target device in debug mode. Here are more detailed steps to do so:
@@ -24,6 +24,11 @@ Download Android Studio and use the play button, when connected to the target de
 
 Simply download the .apk file from [here](app/release/IntegralMe.apk "IntegralMe.apk") and install it on your mobile device. [This simple tutorial](https://www.youtube.com/watch?v=N0M4XGkpCn4) might help you.
 
+### Play Store
+Click the following link on your phone and install the app: [https://play.google.com/store/apps/details?id=integral.me](https://play.google.com/store/apps/details?id=integral.me "IntegralMe")
+
+This version might sometimes not contain all of the features available in the repository versions, but it is fully functional as well.
+
 ## Usage
 
 The app offers four different views, which are briefly described below. 
@@ -31,14 +36,14 @@ The app offers four different views, which are briefly described below.
 ### Main menu
 <img src='https://github.com/Mir3605/IntegralMe/assets/120521300/ab9be648-e22c-4bde-9c1f-98e2c1d3fec3' width='400'>
 
-In the main menu there are level buttons, settings button and games history button. Numbers in the level buttons symbolize difficulty. To play the game simply choose level and difficulty and press the button. 
+In the main menu, there are level buttons, settings button and games history button. Numbers in the level buttons symbolize difficulty. To play the game simply choose level and difficulty and press the button. 
 
 Settings and games history buttons move you to the settings or games history sections. 
 
 ### Level
 <img src='https://github.com/Mir3605/IntegralMe/assets/120521300/a9d6b904-6ef8-42ee-8fb8-d9b4125acf41' width='400'>
 
-On the top of the screen, there are points counter, difficulty header, and stage counter. Below them, there is a problem to solve. Some problems can be solved in one step, but some of them need more thinking. The number of steps needed to solve the problem equals the number of empty fields on the screen. There is always one field selected. To insert an answer into the selected field simply press one of the answers from the bottom half of the screen.
+On the top of the screen, there are points counter, difficulty header, and stage counter. Below them, there is a problem to solve. Some problems can be solved in one step, but some of them need more thinking. The number of steps needed to solve the problem equals the number of empty fields on the screen. There is always one field selected. To insert an answer into the selected field press one of the answers from the bottom half of the screen.
 
 The check button on the bottom of the screen moves you to the next stage (or to the menu in the case of the last stage) if all answers are correct. If you manage to solve two or more problems in a row without wrong answers, you get extra series points. 
 
