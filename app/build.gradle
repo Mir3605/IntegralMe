@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.integralmefirst'
+    namespace 'integral.me'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.example.integralmefirst"
+        applicationId "integral.me"
         minSdk 26
         targetSdk 34
         versionCode 1

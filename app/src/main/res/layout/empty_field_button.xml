@@ -7,7 +7,7 @@
     android:background="@drawable/border_button_unselected"
     android:layout_margin="5dp"
     android:padding="3dp">
-    <com.example.integralmefirst.level.MathRadioButton
+    <integral.me.level.MathRadioButton
         android:id="@+id/emptyField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
