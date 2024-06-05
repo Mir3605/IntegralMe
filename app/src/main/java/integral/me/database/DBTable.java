@@ -2,6 +2,7 @@ package integral.me.database;
 
 import androidx.annotation.NonNull;
 
+// a class that holds table name and column names for a table
 public class DBTable {
     public final String name;
     public final String[] col;

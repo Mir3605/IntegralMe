@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class DBHelper extends SQLiteOpenHelper {
-    private final Resources resources;
+    private final Resources resources; // helper for the R.
     private static final String dbName = "integrals.db";
     private static final int dbVersion = 3;
     public static final DBTable problemsTable = new DBTable("problems", new String[]{"id",
@@ -54,8 +54,9 @@ public class DBHelper extends SQLiteOpenHelper {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        // queries need to be separated as SQLite doesn't do multiple queries in one execSQL
         String[] createTablesSeparated;
-        createTablesSeparated = createTables.split("=");
+        createTablesSeparated = createTables.split("="); // file is specially modified to have '=' between queries
         for (String s : createTablesSeparated)
             db.execSQL(s);
         try {
@@ -65,6 +66,7 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
+    // Read query for tables creation from the file
     private String getCreateTablesSQL() throws IOException {
         InputStream is = resources.openRawResource(R.raw.create_tables);
         byte[] buffer;
@@ -78,12 +80,15 @@ public class DBHelper extends SQLiteOpenHelper {
         return os.toString();
     }
 
+    // DBHelper should always be created with main activity. In the other activities use this method
+    // to get DBHelper
     public static DBHelper getCurrentDBHelper() {
         if (currentDBHelper == null)
             throw new RuntimeException("DBHelper not initialized");
         return currentDBHelper;
     }
 
+    // Recreates the tables that do not contain user data
     public void reloadAnswersAndProblems() {
         try (SQLiteDatabase db = getWritableDatabase()) {
             db.delete(problemsTable.name, null, null);
@@ -94,6 +99,7 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
+    // Inserts data about problems, answers and other gameplay structures into database
     private void insertData(SQLiteDatabase db) throws IOException {
         InputStream is = resources.openRawResource(R.raw.problems);
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
@@ -126,11 +132,13 @@ public class DBHelper extends SQLiteOpenHelper {
         insertDefaultSettingsValues(db);
     }
 
+    // returns the answers in the proper order for the problem given by problemId
     public ArrayList<String> getAnswers(int problemId) {
         ArrayList<String> answers = new ArrayList<>();
         try (SQLiteDatabase db = getReadableDatabase()) {
-            String queryString = "SELECT " + answersTable.col[3] + " FROM " + answersTable.name + " WHERE " + answersTable.col[1] +
-                    " = " + problemId + " ORDER BY " + answersTable.col[2] + " ASC";
+            String queryString = "SELECT " + answersTable.col[3] + " FROM " + answersTable.name +
+                    " WHERE " + answersTable.col[1] + " = " + problemId + " ORDER BY " +
+                    answersTable.col[2] + " ASC";
             Cursor cursor = db.rawQuery(queryString, null);
             if (cursor.moveToFirst()) {
                 String value = cursor.getString(0);
@@ -146,10 +154,12 @@ public class DBHelper extends SQLiteOpenHelper {
         return answers;
     }
 
+    // returns random answers from the database
     public ArrayList<String> getRandomAnswers(int difficulty, int numberOfAnswers) {
         return getRandomAnswersExcludingCorrect(difficulty, numberOfAnswers, -1);
     }
 
+    // returns random answers excluding answers that are connected to the problemId
     public ArrayList<String> getRandomAnswersExcludingCorrect(int difficulty, int numberOfAnswers, int problemId) {
         if (numberOfAnswers <= 0)
             throw new RuntimeException("Cannot select 0 or less answers");
@@ -178,10 +188,12 @@ public class DBHelper extends SQLiteOpenHelper {
         return answers;
     }
 
+    // needed for latex display (database keeps equations without dollars)
     private static String addDollar(String s) {
         return "$" + s + "$";
     }
 
+    // returns list of problemsNumber random problem ids with given difficulty
     public ArrayList<Integer> getRandomProblemsIds(int problemsNumber, int difficulty) {
         if (problemsNumber <= 0)
             throw new RuntimeException("Cannot select 0 or less problems");
@@ -207,6 +219,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return problemsIds;
     }
 
+    // returns latex representation for the problem given by the problemId
     public String getProblemValueById(int problemId) {
         String value = "";
         try (SQLiteDatabase db = getReadableDatabase()) {
@@ -231,12 +244,14 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
+    // adding settings table to the db
     private void onUpgrade3(SQLiteDatabase db) {
         String query = "CREATE TABLE settings (id integer PRIMARY KEY, name text, value integer);";
         db.execSQL(query);
         insertDefaultSettingsValues(db);
     }
 
+    // inserts default settings values chosen by the app author
     private void insertDefaultSettingsValues(SQLiteDatabase db) {
         db.delete(settingsTable.name, null, null);
         updateSetting(db, Settings.STAGES_PER_LEVEL, 3);
@@ -245,17 +260,20 @@ public class DBHelper extends SQLiteOpenHelper {
         updateSetting(db, Settings.ANIMATIONS_DISPLAY, 1);
     }
 
+    // this was step in the wrong direction
     private void rollbackUpgrade2(SQLiteDatabase db) {
         String query = "DROP TABLE stages_number;";
         db.execSQL(query);
     }
 
+    // updates setting based on its value in Settings class
     public void updateSetting(Settings setting) {
         try (SQLiteDatabase db = getWritableDatabase()) {
             updateSetting(db, setting, setting.getIntValue());
         }
     }
 
+    // updates setting based on its value in Settings class
     private void updateSetting(SQLiteDatabase db, Settings setting, int newValue) {
         if (newValue < 0)
             throw new RuntimeException("Settings cannot have negative values");
@@ -266,6 +284,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.insert(settingsTable.name, null, contentValues);
     }
 
+    // reads and returns setting current value from the database
     public int getSettingIntValue(Settings setting) {
         int value = -1;
         try (SQLiteDatabase db = getReadableDatabase()) {
@@ -287,6 +306,7 @@ public class DBHelper extends SQLiteOpenHelper {
         context.deleteDatabase(dbName);
     }
 
+    // removes all of the user data (games history and points)
     public void resetUserData() {
         try (SQLiteDatabase db = getReadableDatabase()) {
             db.delete(gamesHistoryTable.name, null, null);
@@ -294,6 +314,8 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
+    // adds game data to the database, where problemIds are ids of solved problems, times are
+    // solving times corresponding to the problemIds and points received for the game
     public void addGameToHistory(ArrayList<Integer> problemIds, long[] times, int points) {
         try (SQLiteDatabase db = getWritableDatabase()) {
             ContentValues values = new ContentValues();
@@ -310,13 +332,17 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
+    // returns the newest game in the game history
     public GameData getNewestGameStats() {
         return getGamesHistory(true).get(0);
     }
 
+    // returns whole game history sorted by the moment of insertion to the db
     public ArrayList<GameData> getGamesHistory(boolean fromNewest) {
         ArrayList<GameData> gamesHistoryArray = new ArrayList<>();
         try (SQLiteDatabase db = getReadableDatabase()) {
+
+            // read gameIds data from the db
             ArrayList<Integer> gamesIds = new ArrayList<>();
             String query = "SELECT " + gamesPointsTable.col[0] + " FROM " + gamesPointsTable.name +
                     " ORDER BY " + gamesPointsTable.col[0];
@@ -334,6 +360,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 gamesIds.add(value);
             }
             cursor.close();
+
+            // read details from the db about each game
             for (Integer gameId : gamesIds) {
                 query = "SELECT " + problemsTable.getColWithTableName(1) + ", " +
                         gamesPointsTable.getColWithTableName(1) + ", " +
@@ -364,6 +392,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return gamesHistoryArray;
     }
 
+    // returns the statistics about the problems for the problem history activity
     public ArrayList<ProblemData> getProblemsHistory() {
         ArrayList<ProblemData> problemData = new ArrayList<>();
         try (SQLiteDatabase db = getReadableDatabase()) {
@@ -389,6 +418,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return problemData;
     }
 
+    // returns problem ids that are used in the tutorial
     public ArrayList<Integer> getTutorialProblemsIds() {
         ArrayList<Integer> problemsIds = new ArrayList<>();
         try (SQLiteDatabase db = getReadableDatabase()) {
