@@ -14,7 +14,8 @@ import java.util.Objects;
 
 import katex.hourglass.in.mathlib.MathView;
 
-public class AnswersRecViewAdapter extends RecyclerView.Adapter<AnswersRecViewAdapter.ViewHolder>{
+// adapter for storing the possible answers
+public class AnswersRecViewAdapter extends RecyclerView.Adapter<AnswersRecViewAdapter.ViewHolder> {
     private ArrayList<String> fields = new ArrayList<>();
     private final LevelActivity levelActivity;
 
@@ -37,11 +38,12 @@ public class AnswersRecViewAdapter extends RecyclerView.Adapter<AnswersRecViewAd
             @Override
             public void onClick(View view) {
                 String receivedData = levelActivity.setSelectedEmptyField(field);
-                if (Objects.equals(receivedData, LevelActivity.emptyMathField)){
+                // if the selected field is empty - move the answer; else - replace the answer with
+                // the content of the field
+                if (Objects.equals(receivedData, LevelActivity.emptyMathField)) {
                     fields.remove(field);
                     notifyItemRangeRemoved(holder.getAdapterPosition(), 1);
-                }
-                else{
+                } else {
                     fields.set(holder.getAdapterPosition(), receivedData);
                     notifyItemChanged(holder.getAdapterPosition());
                 }
@@ -53,13 +55,16 @@ public class AnswersRecViewAdapter extends RecyclerView.Adapter<AnswersRecViewAd
     public int getItemCount() {
         return fields.size();
     }
-    public class ViewHolder extends RecyclerView.ViewHolder{
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
         private MathView answerButton;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             answerButton = itemView.findViewById(R.id.answerButton);
         }
     }
+
     public void setAnswers(ArrayList<String> answerList) {
         this.fields = answerList;
         notifyDataSetChanged();
@@ -69,6 +74,6 @@ public class AnswersRecViewAdapter extends RecyclerView.Adapter<AnswersRecViewAd
         if (LevelActivity.emptyMathField.equals(answer))
             return;
         fields.add(answer);
-        notifyItemInserted(fields.size()-1);
+        notifyItemInserted(fields.size() - 1);
     }
 }

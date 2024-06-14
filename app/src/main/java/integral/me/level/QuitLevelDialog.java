@@ -13,6 +13,7 @@ import androidx.fragment.app.DialogFragment;
 import integral.me.R;
 import integral.me.settings.Settings;
 
+// dialog displayed when user tries to quit the level during the game
 public class QuitLevelDialog extends DialogFragment {
     @NonNull
     @Override

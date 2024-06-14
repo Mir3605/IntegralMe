@@ -14,9 +14,11 @@ import java.util.ArrayList;
 
 import katex.hourglass.in.mathlib.MathView;
 
-public class GameCardRecViewAdapter extends RecyclerView.Adapter<GameCardRecViewAdapter.ViewHolder>{
-    private ArrayList<Long> times;
-    private ArrayList<String> problems;
+// Adapter for a single game card insides
+public class GameCardRecViewAdapter extends RecyclerView.Adapter<GameCardRecViewAdapter.ViewHolder> {
+    private ArrayList<Long> times; // time it took to solve each example
+    private ArrayList<String> problems; // list of problems that were solved in the game
+
     @NonNull
     @Override
     public GameCardRecViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -27,7 +29,7 @@ public class GameCardRecViewAdapter extends RecyclerView.Adapter<GameCardRecView
     @Override
     public void onBindViewHolder(@NonNull GameCardRecViewAdapter.ViewHolder holder, int position) {
         holder.problem.setDisplayText(problems.get(position));
-        String timeText = times.get(position)/1000 + "." + (times.get(position)/100)%10 + "s";
+        String timeText = times.get(position) / 1000 + "." + (times.get(position) / 100) % 10 + "s";
         holder.time.setText(timeText);
     }
 
@@ -42,9 +44,10 @@ public class GameCardRecViewAdapter extends RecyclerView.Adapter<GameCardRecView
         notifyDataSetChanged();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView time;
         private MathView problem;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             time = itemView.findViewById(R.id.Time);

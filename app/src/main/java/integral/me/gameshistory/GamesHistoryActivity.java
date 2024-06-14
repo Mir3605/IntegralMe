@@ -23,13 +23,19 @@ public class GamesHistoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_games_history);
+
+        // importing games history
         DBHelper helper = DBHelper.getCurrentDBHelper();
         ArrayList<GameData> gamesHistory = helper.getGamesHistory(Settings.getFromNewestGamesHistory());
+
+        // setting UI elements
         RecyclerView recyclerView = findViewById(R.id.GamesHistoryRecyclerView);
         GamesRecViewAdapter adapter = new GamesRecViewAdapter(this);
         adapter.setGamesHistory(gamesHistory);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // button used to switch activity to ProblemsHistoryActivity
         Button switchToProblemsButton = findViewById(R.id.SwitchToProblems);
         switchToProblemsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,6 +51,7 @@ public class GamesHistoryActivity extends AppCompatActivity {
     @Override
     public void finish() {
         super.finish();
+        // applies animation
         if (!Settings.getAnimationsDisplay())
             return;
         if (movingToMainActivity)

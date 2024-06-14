@@ -10,6 +10,7 @@ import integral.me.R;
 
 import katex.hourglass.in.mathlib.MathView;
 
+// pseudo radio button that displays latex formulas
 public class MathRadioButton extends MathView implements Checkable {
     private boolean checked;
     Context context;

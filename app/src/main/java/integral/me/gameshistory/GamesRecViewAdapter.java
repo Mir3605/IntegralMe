@@ -13,6 +13,7 @@ import integral.me.R;
 
 import java.util.ArrayList;
 
+// adapter for all games cards recycler view
 public class GamesRecViewAdapter extends RecyclerView.Adapter<GamesRecViewAdapter.ViewHolder> {
     private final GamesHistoryActivity gamesHistoryActivity;
     private ArrayList<GameData> gamesHistory;

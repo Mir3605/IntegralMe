@@ -15,6 +15,7 @@ import integral.me.settings.Settings;
 import java.util.ArrayList;
 import java.util.Objects;
 
+// adapter for the empty fields that are place to hold the answers chosen by user
 public class EmptyFieldsRecViewAdapter extends RecyclerView.Adapter<EmptyFieldsRecViewAdapter.ViewHolder> {
     private ArrayList<String> fields = new ArrayList<>();
     private final LevelActivity levelActivity;
@@ -38,6 +39,7 @@ public class EmptyFieldsRecViewAdapter extends RecyclerView.Adapter<EmptyFieldsR
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         String field = fields.get(position);
         holder.emptyField.setText(field);
+        // highlight the checked field
         if (position == selectedPosition) {
             holder.emptyField.setChecked(true);
             holder.emptyFieldBox.setBackground(AppCompatResources.getDrawable(levelActivity, R.drawable.border_button_selected));
@@ -50,11 +52,15 @@ public class EmptyFieldsRecViewAdapter extends RecyclerView.Adapter<EmptyFieldsR
             public void onClick(View view) {
                 MathRadioButton button = (MathRadioButton) view;
                 int currentPosition = holder.getAdapterPosition();
+
+                // if the ReturnOnClick option is selected and the field is not empty - return its
+                // content to the answers pool
                 if (!LevelActivity.emptyMathField.equals(fields.get(currentPosition)) &&
                         Settings.getReturnOnClick()) {
                     levelActivity.addToAnswers(fields.get(currentPosition));
                     fields.set(currentPosition, LevelActivity.emptyMathField);
                 }
+                // change checked field if needed
                 if (!button.isChecked()) {
                     int oldSelectedPosition = selectedPosition;
                     selectedPosition = currentPosition;
@@ -78,6 +84,7 @@ public class EmptyFieldsRecViewAdapter extends RecyclerView.Adapter<EmptyFieldsR
         notifyDataSetChanged();
     }
 
+    // returns the content of the selected empty field
     public String setSelectedEmptyField(String data) {
         String s = fields.get(selectedPosition);
         fields.set(selectedPosition, data);
@@ -98,24 +105,28 @@ public class EmptyFieldsRecViewAdapter extends RecyclerView.Adapter<EmptyFieldsR
 
     private void selectNextEmptyField() {
         int newSelectedPosition = (selectedPosition + 1) % getItemCount();
+        // do not select next field if the current selected field is the last one
         if (newSelectedPosition == 0) {
             notifyItemChanged(getItemCount() - 1);
             return;
         }
         MathRadioButton button = getMathRadioButtonSafe(newSelectedPosition);
+        // the button should not be null
         if (button == null) {
             notifyItemChanged(selectedPosition);
             return;
         }
-        button.callOnClick();
+        button.callOnClick(); // selects next field
     }
 
     private MathRadioButton getMathRadioButtonSafe(int position) {
         MathRadioButton button = null;
         int maxIter = 100000;
         while (button == null && maxIter > 0) {
+            // the method below doesn't always scroll properly, so additional scrolling is needed
             recyclerView.scrollToPosition(position);
             RecyclerView.LayoutManager manager = recyclerView.getLayoutManager();
+            // sometimes because of the incorrect position the manager is not available immediately
             while (manager == null && maxIter > 0) {
                 recyclerView.scrollBy(0, 5);
                 manager = recyclerView.getLayoutManager();
@@ -124,6 +135,7 @@ public class EmptyFieldsRecViewAdapter extends RecyclerView.Adapter<EmptyFieldsR
             if (maxIter < 1)
                 break;
             View view = manager.findViewByPosition(position);
+            // same thing with the view
             while (view == null && maxIter > 0) {
                 recyclerView.scrollBy(0, 5);
                 view = manager.findViewByPosition(position);
@@ -134,7 +146,7 @@ public class EmptyFieldsRecViewAdapter extends RecyclerView.Adapter<EmptyFieldsR
             button = view.findViewById(R.id.emptyField);
             maxIter--;
         }
-        return button;
+        return button; // will likely return the button
     }
 
     public boolean checkIfFieldsMatchWith(@NonNull ArrayList<String> array) {

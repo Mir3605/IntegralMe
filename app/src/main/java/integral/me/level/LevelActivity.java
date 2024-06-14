@@ -30,10 +30,11 @@ import smartdevelop.ir.eram.showcaseviewlib.GuideView;
 import smartdevelop.ir.eram.showcaseviewlib.config.DismissType;
 import smartdevelop.ir.eram.showcaseviewlib.listener.GuideListener;
 
+// is called each time the new stage is reached
 public class LevelActivity extends AppCompatActivity {
-    public static final int seriesMultiplier = 20;
-    public static final String emptyMathField = "$\\,$";
-    private int lastStageNumber;
+    public static final int seriesMultiplier = 20; // arbitrary chosen value
+    public static final String emptyMathField = "$\\,$"; // displays nothing in latex
+    private int lastStageNumber; // in other words: number of stages
     private long startTime;
     private long[] timeList;
     private ArrayList<Integer> problemIds;
@@ -169,12 +170,16 @@ public class LevelActivity extends AppCompatActivity {
     }
 
     private void finishLevel() {
+        // add game data to the games history
         helper.addGameToHistory(problemIds, timeList, points);
+        // retrieve this data in the nice format
         GameData gameData = helper.getNewestGameStats();
+        // show level summary dialog
         LevelSummaryDialog dialog = new LevelSummaryDialog(gameData);
         dialog.show(getSupportFragmentManager(), "LevelSummaryDialog");
         getSupportFragmentManager().executePendingTransactions();
         Dialog dialog1 = dialog.getDialog();
+        // apply "quit upon touch" functionality
         if (dialog1 != null) {
             Window window = dialog1.getWindow();
             if (window != null) {
@@ -190,6 +195,7 @@ public class LevelActivity extends AppCompatActivity {
                 Log.i("LevelActivity", "dialog.getDialog().getWindow() produced null");
         } else
             Log.i("LevelActivity", "dialog.getDialog() produced null");
+        // display tutorial message if needed
         if (Settings.getDisplayTutorial()) {
             GuideView guideView = new GuideView.Builder(this)
                     .setTargetView(dialog1.findViewById(R.id.LevelSummaryRelativeLayout))
@@ -219,18 +225,19 @@ public class LevelActivity extends AppCompatActivity {
         intent.putExtra("stageNum", currentStageNumber + 1);
         intent.putExtra("timeList", timeList);
         startActivity(intent);
-        if (Settings.getAnimationsDisplay())
-            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         finish();
     }
 
     @Override
     public void finish() {
         super.finish();
+        // apply animations if needed
         if (!Settings.getAnimationsDisplay())
             return;
         if (isLastLevel())
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        else
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     public String setSelectedEmptyField(String data) {

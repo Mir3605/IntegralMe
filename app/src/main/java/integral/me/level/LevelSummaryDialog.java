@@ -18,6 +18,7 @@ import integral.me.R;
 import integral.me.gameshistory.GameCardRecViewAdapter;
 import integral.me.gameshistory.GameData;
 
+// dialog displayed at the end of the level
 public class LevelSummaryDialog extends DialogFragment {
     private final GameData gameData;
     public LevelSummaryDialog(GameData gameData) {

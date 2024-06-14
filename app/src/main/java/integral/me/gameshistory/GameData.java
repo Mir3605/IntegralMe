@@ -3,6 +3,7 @@ package integral.me.gameshistory;
 import java.sql.Date;
 import java.util.ArrayList;
 
+// class to store data about a game
 public class GameData {
     private final ArrayList<String> problems;
     private final int points;
@@ -24,7 +25,8 @@ public class GameData {
     public long getDate() {
         return date;
     }
-    public String getDateAsString(){
+
+    public String getDateAsString() {
         Date date = new Date(getDate());
         return date.toString();
     }
